@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__. '/../vendor/autoload.php';
+
+$application = new \Symfony\Component\Console\Application('PestConverter', '0.1.0');
+$command = new \PestConverter\Console\ConvertCommand();
+
+$application->add($command);
+
+$application->setDefaultCommand($command->getName(), true);
+
+exit($application->run());

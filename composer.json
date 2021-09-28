@@ -1,0 +1,43 @@
+{
+    "name": "mandisma/pest-converter",
+    "license": "MIT",
+    "description": "PHPUnit to Pest Converter",
+    "autoload": {
+        "psr-4": {
+            "PestConverter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PestConverter\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "mandisma",
+            "email": "mandis68@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "nikic/php-parser": "^4.13",
+        "symfony/console": "^5.3.3",
+        "symfony/finder": "^5.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.1",
+        "vimeo/psalm": "^4.10",
+        "pestphp/pest": "^1.20"
+    },
+    "bin": [
+        "bin/pest-converter"
+    ],
+    "scripts": {
+        "test": "pest",
+        "test:coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage",
+        "psalm": "psalm",
+        "psalm:info": "psalm --show-info=true",
+        "lint": "php-cs-fixer fix --config=.php_cs.dist.php -v --dry-run",
+        "lint:fix": "php-cs-fixer fix --config=.php_cs.dist.php -v"
+    }
+}

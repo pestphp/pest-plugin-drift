@@ -1,0 +1,44 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: [8.0]
+        stability: [prefer-lowest, prefer-stable]
+
+    name: PHP ${{ matrix.php-versions }} - ${{ matrix.stability }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: xdebug
+        tools: composer:v2
+  
+    - name: Check PHP Version
+      run: php -v
+
+    - name: Install dependencies
+      run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
+    - name: Run PHPCS
+      run: composer lint
+
+    - name: Run Psalm
+      run: composer psalm
+
+    - name: Run test suite
+      run: vendor/bin/pest
