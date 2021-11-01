@@ -1,7 +1,7 @@
 # PestConverter
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mandisma/pest-converter.svg?style=flat-square)](https://packagist.org/packages/mandisma/pest-converter)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/mandisma/pest-converter/PHP%20Composer?label=tests)](https://github.com/mandisma/pest-converter/actions?query=workflow%3A"PHP+Composer"+branch%3Amaster)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/mandisma/pest-converter/PHP%20Composer?label=tests)](https://github.com/mandisma/pest-converter/actions?query=workflow%3A"PHP+Composer"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/mandisma/pest-converter.svg?style=flat-square)](https://packagist.org/packages/mandisma/pest-converter)
 
 
