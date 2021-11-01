@@ -4,8 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/mandisma/pest-converter/PHP%20Composer?label=tests)](https://github.com/mandisma/pest-converter/actions?query=workflow%3A"PHP+Composer"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/mandisma/pest-converter.svg?style=flat-square)](https://packagist.org/packages/mandisma/pest-converter)
 
-
-PestConverter is a PHP library for convert PHPUnit Test to Pest Test.
+PestConverter is a PHP library for converting PHPUnit tests to Pest tests.
 
 ## Before use
 
