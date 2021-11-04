@@ -11,6 +11,7 @@ return [
     new \PestConverter\Rules\SetUpToBeforeEach(),
     new \PestConverter\Rules\TearDownToAfterEach(),
     new \PestConverter\Rules\RemoveProperties(),
+    new \PestConverter\Rules\TraitToUses(),
     new \PestConverter\Rules\Assertions\AssertEquals(),
     new \PestConverter\Rules\Assertions\AssertInstanceOf(),
     new \PestConverter\Rules\Assertions\AssertTrue(),

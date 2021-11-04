@@ -111,6 +111,18 @@ it('remove properties', function () {
     expect($convertedCode)->not->toContain('protected $myProperty;');
 });
 
+it('keep using traits', function () {
+    $code = '<?php
+        class MyTest {
+            use MyTrait;
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('uses(\MyTrait::class);');
+});
+
 it('convert assertEquals to Pest expectation', function () {
     $code = '<?php
         class MyTest {
