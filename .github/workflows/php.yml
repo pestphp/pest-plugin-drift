@@ -27,7 +27,7 @@ jobs:
         php-version: ${{ matrix.php-versions }}
         extensions: xdebug
         tools: composer:v2
-  
+
     - name: Check PHP Version
       run: php -v
 

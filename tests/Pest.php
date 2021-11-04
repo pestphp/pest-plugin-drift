@@ -47,6 +47,8 @@ function initFixtures()
 {
     if (is_dir(tmpDir())) {
         cleanFixtures();
+    } else {
+        mkdir(tmpDir());
     }
 
     mkdir(tmpDir('sources'));
