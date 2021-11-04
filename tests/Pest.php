@@ -13,15 +13,9 @@
 
 // uses(Tests\TestCase::class)->in('Feature');
 uses()
-    ->beforeAll(function () {
-        if (is_dir(tmpDir())) {
-            cleanTmpDir();
-        } else {
-            mkdir(tmpDir());
-        }
-    })
-    ->afterAll(fn () => cleanTmpDir())
-    ->in('CommandTest.php', 'Converters/FileConverterTest.php');
+    ->beforeAll(fn () => initFixtures())
+    ->afterAll(fn () => cleanFixtures())
+    ->in('CommandTest.php', 'Converters/FileConverterTest.php', 'Finder');
 
 /*
 |--------------------------------------------------------------------------
@@ -49,13 +43,33 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function tmpDir()
+function initFixtures()
 {
-    return realpath(sys_get_temp_dir()) . '/pest_converter';
+    if (is_dir(tmpDir())) {
+        cleanFixtures();
+    }
+
+    mkdir(tmpDir('sources'));
+    mkdir(tmpDir('results'));
+
+
+    touch(tmpDir('sources/FooTest.php'));
+    touch(tmpDir('sources/BarTest.php'));
+
+    touch(tmpDir('sources/OtherClass.php'));
+
+    mkdir(tmpDir('sources/Alpha'));
+    touch(tmpDir('sources/Alpha/HelloTest.php'));
+    touch(tmpDir('sources/Alpha/WorldTest.php'));
+
+    mkdir(tmpDir('sources/Beta'));
+    touch(tmpDir('sources/Beta/OneTest.php'));
+
+    mkdir(tmpDir('sources/Beta/Charlie'));
+    touch(tmpDir('sources/Beta/Charlie/TwoTest.php'));
 }
 
-
-function cleanTmpDir()
+function cleanFixtures()
 {
     $paths = new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator(tmpDir(), \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -73,4 +87,12 @@ function cleanTmpDir()
             @unlink($path);
         }
     }
+}
+
+
+function tmpDir(string $path = '')
+{
+    $tmpDir = realpath(sys_get_temp_dir()) . '/pest_converter';
+
+    return $tmpDir . '/' . $path;
 }

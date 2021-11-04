@@ -11,18 +11,19 @@ it('execute successfully', function () {
     $tmpDir = tmpDir();
 
     $code = $commandTester->execute([
-        'dir' => __DIR__ . '/fixtures/Converters/',
-        '--output' => $tmpDir,
+        'dir' => tmpDir('sources'),
+        '--output' => tmpDir('results'),
     ]);
 
     expect($convertCommand->getName())->toBe('convert');
     expect($code)->toBe(BaseCommand::SUCCESS);
-    expect($tmpDir)->toBeDirectory();
-    expect(scandir($tmpDir))->toEqualCanonicalizing([
+    expect(tmpDir('results'))->toBeDirectory();
+    expect(scandir(tmpDir('results')))->toEqualCanonicalizing([
         '.',
         '..',
         'FooTest.php',
         'BarTest.php',
-        'Recursive',
+        'Alpha',
+        'Beta',
     ]);
 });

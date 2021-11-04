@@ -2,134 +2,247 @@
 
 use PestConverter\Converters\CodeConverterFactory;
 
-function foo()
-{
-    return file_get_contents(__DIR__ . '/../fixtures/Converters/FooTest.php');
-}
-
-function bar()
-{
-    return file_get_contents(__DIR__ . '/../fixtures/Converters/BarTest.php');
-}
-
 function codeConverter()
 {
     return (new CodeConverterFactory())->codeConverter();
 }
 
 it('remove namespace', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php namespace Test\Namespace;';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain('namespace');
 });
 
 it('remove class', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php class MyTest {}';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain("class FooTest");
 });
 
-// it('keep use', function () {
-//     $convertedCode = codeConverter()->convert(foo());
+it('remove use', function () {
+    $code = '<?php
+        use PHPUnit\Framework\TestCase;
+        use MyClass;
+    ';
 
-//     expect($convertedCode)->toContain("use PestConverter\Tests\Fixtures\Some\Thing;");
-// });
-
-it('remove base TestCase use', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain("use PHPUnit\Framework\TestCase;");
 });
 
 it('convert extends class to uses method', function () {
-    $convertedCode = codeConverter()->convert(bar());
+    $code = '<?php
+        use PestConverter\Tests\Fixtures\FixtureTestCase;
+
+        class MyTest extends FixtureTestCase {}
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("uses(\PestConverter\Tests\Fixtures\FixtureTestCase::class);");
 });
 
 it('doesnt convert extends PhpUnit TestCase', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        use PHPUnit\Framework\TestCase;
+
+        class MyTest extends TestCase {}
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain("uses(\PHPUnit\Framework\TestCase::class);");
     expect($convertedCode)->not->toContain("uses(TestCase::class);");
 });
 
 it('convert phpunit class method to pest function call', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_true_is_true() {}
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("test('true is true', function () {");
 });
 
 it('convert lyfecyle method', function () {
-    $convertedCode = codeConverter()->convert(bar());
+    $code = '<?php
+        class MyTest {
+            protected function setUp() {}
+            protected function tearDown() {}
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("beforeEach");
-    expect($convertedCode)->toContain("afterEach");
+    expect($convertedCode)->toContain("beforeEach");
+    expect($convertedCode)->not->toContain("setUp");
+    expect($convertedCode)->not->toContain("tearDown");
 });
 
 it('keep non test method', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            protected function thisIsNotATest() {}
+        }
+    ';
 
-    expect($convertedCode)->toContain("function this_is_not_a_test()");
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain("protected function thisIsNotATest()");
 });
 
-it('convert properties to function call', function () {
-    $convertedCode = codeConverter()->convert(foo());
+it('remove properties', function () {
+    $code = '<?php
+        class MyTest {
+            protected $myProperty;
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain('protected $myProperty;');
-    expect($convertedCode)->toContain('$test = $this->myProperty;');
 });
 
 it('convert assertEquals to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_equals()
+            {
+                $this->assertEquals("foo", "bar");
+            }
+        }
+    ';
 
-    expect($convertedCode)->toContain("expect('bar')->toEqual('foo')");
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("bar")->toEqual("foo")');
 });
 
 it('convert assertInstanceOf to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        use PestConverter\Tests\Fixtures\Some\Thing;
+        class MyTest {
+            public function test_instanceof()
+            {
+                $this->assertInstanceOf(Thing::class, $thing);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain('expect($thing)->toBeInstanceOf(\PestConverter\Tests\Fixtures\Some\Thing::class)');
 });
 
 it('convert assertTrue to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_true()
+            {
+                $this->assertTrue(true);
+            }
+        }
+    ';
 
-    expect($convertedCode)->toContain('expect(true)->toBeTrue()');
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(\true)->toBeTrue()');
 });
 
 it('convert assertIsArray to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_array()
+            {
+                $this->assertIsArray([]);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain('expect([])->toBeArray()');
 });
 
 it('convert assertArrayHasKey to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_array_has_key()
+            {
+                $this->assertArrayHasKey("foo", ["foo"]);
+            }
+        }
+    ';
 
-    expect($convertedCode)->toContain("expect(['foo'])->toHaveKey('foo')");
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(["foo"])->toHaveKey("foo")');
 });
 
 it('convert assertIsString to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_string()
+            {
+                $this->assertIsString("foo");
+            }
+        }
+    ';
 
-    expect($convertedCode)->toContain("expect('foo')->toBeString()");
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("foo")->toBeString()');
 });
 
 it('convert assertEmpty to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_empty()
+            {
+                $this->assertEmpty([]);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("expect([])->toBeEmpty()");
 });
 
 it('convert assertNotEmpty to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_not_empty()
+            {
+                $this->assertNotEmpty([]);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("expect([])->not->toBeEmpty()");
 });
 
 it('convert assertContains to Pest expectation', function () {
-    $convertedCode = codeConverter()->convert(foo());
+    $code = '<?php
+        class MyTest {
+            public function test_assert_contains()
+            {
+                $this->assertContains(1, []);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("expect([])->toContain(1)");
 });

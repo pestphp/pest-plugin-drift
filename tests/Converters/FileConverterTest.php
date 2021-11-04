@@ -7,7 +7,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 it('create converted file', function () {
     $splFileInfo = new SplFileInfo(
-        __DIR__ . '/../fixtures/Converters/FooTest.php',
+        tmpDir('sources/FooTest.php'),
         '',
         '/'
     );
@@ -16,7 +16,7 @@ it('create converted file', function () {
 
     $codeConverter = (new CodeConverterFactory())->codeConverter();
 
-    (new FileConverter($codeConverter, tmpDir()))->convert($file);
+    (new FileConverter($codeConverter, tmpDir('results')))->convert($file);
 
-    expect(file_exists(tmpDir() . '/FooTest.php'))->toBeTrue();
+    expect(file_exists(tmpDir('results') . '/FooTest.php'))->toBeTrue();
 });
