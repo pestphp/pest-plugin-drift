@@ -94,16 +94,24 @@ it('convert lyfecyle method', function () {
     expect($convertedCode)->not->toContain("tearDown");
 });
 
-it('keep non test method', function () {
+it('convert non test method', function () {
     $code = '<?php
         class MyTest {
             protected function thisIsNotATest() {}
+
+            public function test_non_test_method()
+            {
+                $this->thisIsNotATest();
+            }
         }
     ';
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain("protected function thisIsNotATest()");
+    expect($convertedCode)->toContain('function thisIsNotATest()');
+    expect($convertedCode)->not->toContain('protected function thisIsNotATest()');
+    expect($convertedCode)->toContain('thisIsNotATest()');
+    expect($convertedCode)->not->toContain('$this->thisIsNotATest()');
 });
 
 it('remove properties', function () {

@@ -8,6 +8,7 @@ return [
     new \PestConverter\Rules\ExtendsToUses(),
     new \PestConverter\Rules\RemoveUse(),
     new \PestConverter\Rules\ConvertTestMethod(),
+    new \PestConverter\Rules\ConvertNonTestMethod(),
     new \PestConverter\Rules\SetUpToBeforeEach(),
     new \PestConverter\Rules\TearDownToAfterEach(),
     new \PestConverter\Rules\RemoveProperties(),
