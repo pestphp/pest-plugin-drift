@@ -63,12 +63,19 @@ it('convert phpunit class method to pest function call', function () {
     $code = '<?php
         class MyTest {
             public function test_true_is_true() {}
+
+            public function testFalseIsFalse() {}
+
+            /** @test */
+            public function it_works() {}
         }
     ';
 
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("test('true is true', function () {");
+    expect($convertedCode)->toContain("test('false is false', function () {");
+    expect($convertedCode)->toContain("it('works', function () {");
 });
 
 it('convert lyfecyle method', function () {

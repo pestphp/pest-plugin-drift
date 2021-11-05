@@ -31,7 +31,7 @@ final class ConvertTestMethod extends NodeVisitorAbstract
         $methodName = $node->name->toString();
 
         $newNode = new Expression(new FuncCall(
-            new Name('test'),
+            new Name($this->guessFunctionCall($methodName)),
             [
                 new Arg(new String_($this->methodNameToDescription($methodName))),
                 new Arg(new Closure([
@@ -52,17 +52,28 @@ final class ConvertTestMethod extends NodeVisitorAbstract
 
     private function isTestMethod(ClassMethod $classMethod): bool
     {
-        return str_starts_with($classMethod->name->toString(), 'test');
+        $comments = $classMethod->getComments();
+
+        return str_starts_with($classMethod->name->toString(), 'test') || in_array('/** @test */', $comments);
     }
 
     private function methodNameToDescription(string $name): string
     {
         $newName = preg_replace(
-            ['/^test/', '/_/', '/(?=[A-Z])/'],
+            ['/^(test|it)/', '/_/', '/(?=[A-Z])/'],
             ['', ' ', ' '],
             $name
         );
 
         return trim(strtolower($newName));
+    }
+
+    private function guessFunctionCall(string $methodName): string
+    {
+        if (str_starts_with($methodName, 'it')) {
+            return 'it';
+        }
+
+        return 'test';
     }
 }
