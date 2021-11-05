@@ -27,7 +27,8 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.1",
         "vimeo/psalm": "^4.10",
-        "pestphp/pest": "^1.20"
+        "pestphp/pest": "^1.20",
+        "composer/composer": "dev-main"
     },
     "bin": [
         "bin/pest-converter"

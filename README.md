@@ -14,17 +14,22 @@ Install Pest before : <https://pestphp.com/docs/installation>
 
 ## Installation
 
+> **Requires [PHP 8.0+](https://php.net/releases/)**
+
 You can install the package via composer:
 
 ```bash
-composer require mandisma/pest-converter --dev
+composer global require mandisma/pest-converter
 ```
 
 ## Usage
 
 ```bash
+# Install and initialize Pest in your project
+pest-converter init
+
 # Convert tests
-vendor/bin/pest-converter tests
+pest-converter convert your_tests_directory
 ```
 
 ## Testing
