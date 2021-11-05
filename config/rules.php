@@ -21,6 +21,7 @@ return [
     new \PestConverter\Rules\Assertions\AssertEmpty(),
     new \PestConverter\Rules\Assertions\AssertNotEmpty(),
     new \PestConverter\Rules\Assertions\AssertContains(),
+    new \PestConverter\Rules\Assertions\AssertNotContains(),
     new \PestConverter\Rules\Assertions\AssertSame(),
     new \PestConverter\Rules\Assertions\AssertNull(),
 ];
