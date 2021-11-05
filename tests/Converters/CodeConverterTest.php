@@ -258,3 +258,20 @@ it('convert assertContains to Pest expectation', function () {
 
     expect($convertedCode)->toContain("expect([])->toContain(1)");
 });
+
+it('convert assertSame to Pest expectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_same()
+            {
+                $myObject = new Object();
+
+                $this->assertSame($object, $object);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect($object)->toBe($object)');
+});
