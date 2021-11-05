@@ -25,4 +25,5 @@ return [
     new \PestConverter\Rules\Assertions\AssertNotContains(),
     new \PestConverter\Rules\Assertions\AssertSame(),
     new \PestConverter\Rules\Assertions\AssertNull(),
+    new \PestConverter\Rules\Assertions\AssertNotNull(),
 ];

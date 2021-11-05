@@ -320,3 +320,18 @@ it('convert assertNull to Pest expectation', function () {
 
     expect($convertedCode)->toContain('expect(\null)->toBeNull()');
 });
+
+it('convert assertNotNull to Pest expectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_null()
+            {
+                $this->assertNotNull(null);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(\null)->not->toBeNull()');
+});
