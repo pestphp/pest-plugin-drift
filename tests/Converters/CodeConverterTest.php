@@ -275,3 +275,18 @@ it('convert assertSame to Pest expectation', function () {
 
     expect($convertedCode)->toContain('expect($object)->toBe($object)');
 });
+
+it('convert assertNull to Pest expectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_null()
+            {
+                $this->assertNull(null);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(\null)->toBeNull()');
+});
