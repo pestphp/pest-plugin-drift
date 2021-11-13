@@ -23,7 +23,7 @@ final class ExtendsToUses extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (! $node instanceof Class_ || $node->extends === null || $node->extends->toString() === 'PHPUnit\Framework\TestCase') {
+        if (! $node instanceof Class_ || $node->extends === null || $node->extends->getAttribute('resolvedName')->toString() === 'PHPUnit\Framework\TestCase') {
             return null;
         }
 
@@ -31,7 +31,7 @@ final class ExtendsToUses extends NodeVisitorAbstract
             new FuncCall(
                 new Name('uses'),
                 [
-                    new Arg(new ClassConstFetch($node->extends, 'class')),
+                    new Arg(new ClassConstFetch($node->extends->getAttribute('resolvedName'), 'class')),
                 ]
             )
         );

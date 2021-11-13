@@ -25,7 +25,9 @@ final class CodeConverterFactory
         $prettyPrinter = new Standard();
 
         $nodeTraverser->addVisitor(new NodeConnectingVisitor());
-        $nodeTraverser->addVisitor(new NameResolver());
+        $nodeTraverser->addVisitor(new NameResolver(null, [
+            'replaceNodes' => false,
+        ]));
         $nodeTraverser->addVisitor(new OriginalNodeVisitor());
 
         foreach ($visitors as $visitor) {

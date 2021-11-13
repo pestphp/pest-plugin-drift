@@ -23,15 +23,18 @@ it('remove class', function () {
     expect($convertedCode)->not->toContain("class FooTest");
 });
 
-it('remove use', function () {
+it('remove unnecessary use', function () {
     $code = '<?php
         use PHPUnit\Framework\TestCase;
-        use MyClass;
+        use My\Class;
+
+        class MyTest extends TestCase {}
     ';
 
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain("use PHPUnit\Framework\TestCase;");
+    expect($convertedCode)->toContain("use My\Class;");
 });
 
 it('convert extends class to uses method', function () {
@@ -43,6 +46,7 @@ it('convert extends class to uses method', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
+    expect($convertedCode)->not->toContain('use PestConverter\Tests\Fixtures\FixtureTestCase;');
     expect($convertedCode)->toContain("uses(\PestConverter\Tests\Fixtures\FixtureTestCase::class);");
 });
 
@@ -108,10 +112,11 @@ it('convert non test method', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('function thisIsNotATest()');
-    expect($convertedCode)->not->toContain('protected function thisIsNotATest()');
-    expect($convertedCode)->toContain('thisIsNotATest()');
-    expect($convertedCode)->not->toContain('$this->thisIsNotATest()');
+    expect($convertedCode)
+        ->toContain('function thisIsNotATest()')
+        ->not->toContain('protected function thisIsNotATest()')
+        ->toContain('thisIsNotATest()')
+        ->not->toContain('$this->thisIsNotATest()');
 });
 
 it('remove properties', function () {
@@ -128,14 +133,39 @@ it('remove properties', function () {
 
 it('keep using traits', function () {
     $code = '<?php
+        use My\CustomTrait;
         class MyTest {
-            use MyTrait;
+            use CustomTrait;
         }
     ';
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('uses(\MyTrait::class);');
+    expect($convertedCode)
+        ->toContain('uses(\My\CustomTrait::class);')
+        ->not->toContain('use My\CustomTrait;')
+        ->not->toContain('use CustomTrait;');
+});
+
+it('add missing use', function () {
+    $code = '<?php
+        namespace PestConverter\Tests;
+
+        use PestConverter\Tests\Helper\Foo;
+
+        class MyTest {
+            public function test_foo()
+            {
+                $foo = new Foo();
+                $bar = new Bar();
+                $date = new DateTime();
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('use \PestConverter\Tests\Bar;');
 });
 
 it('convert assertEquals to Pest expectation', function () {
@@ -166,7 +196,9 @@ it('convert assertInstanceOf to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('expect($thing)->toBeInstanceOf(\PestConverter\Tests\Fixtures\Some\Thing::class)');
+    expect($convertedCode)
+        ->toContain('use PestConverter\Tests\Fixtures\Some\Thing;')
+        ->toContain('expect($thing)->toBeInstanceOf(Thing::class)');
 });
 
 it('convert assertTrue to Pest expectation', function () {
@@ -181,7 +213,7 @@ it('convert assertTrue to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('expect(\true)->toBeTrue()');
+    expect($convertedCode)->toContain('expect(true)->toBeTrue()');
 });
 
 it('convert assertIsArray to Pest expectation', function () {
@@ -318,7 +350,7 @@ it('convert assertNull to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('expect(\null)->toBeNull()');
+    expect($convertedCode)->toContain('expect(null)->toBeNull()');
 });
 
 it('convert assertNotNull to Pest expectation', function () {
@@ -333,5 +365,5 @@ it('convert assertNotNull to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('expect(\null)->not->toBeNull()');
+    expect($convertedCode)->toContain('expect(null)->not->toBeNull()');
 });

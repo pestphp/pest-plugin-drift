@@ -27,17 +27,15 @@ final class TraitToUses extends NodeVisitorAbstract
             return null;
         }
 
-        $traits = array_map(function ($trait) {
+        return array_map(static function (Name $trait) {
             return new Expression(
                 new FuncCall(
                     new Name('uses'),
                     [
-                        new Arg(new ClassConstFetch($trait, 'class')),
+                        new Arg(new ClassConstFetch($trait->getAttribute('resolvedName'), 'class')),
                     ]
                 )
             );
         }, $node->traits);
-
-        return $traits;
     }
 }

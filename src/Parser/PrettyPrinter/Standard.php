@@ -26,15 +26,21 @@ final class Standard extends BaseStandard
     {
         $result = parent::pStmt_Expression($node);
 
-        if ($node->hasAttribute('original_node') && $this->shouldBreakLine($node->getAttribute('original_node'))) {
+        if ($this->shouldBreakLine($node)) {
             $result .= "\n";
         }
 
         return $result;
     }
 
-    private function shouldBreakLine(Node $originalNode): bool
+    private function shouldBreakLine(Node $node): bool
     {
+        if (! $node->hasAttribute('original_node')) {
+            return false;
+        }
+
+        $originalNode = $node->getAttribute('original_node');
+
         $originalEndLine = $originalNode->getAttribute('endLine');
 
         if (! $originalNode->hasAttribute('next')) {

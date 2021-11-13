@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeFinder;
@@ -29,7 +28,7 @@ final class ConvertNonTestMethod extends NodeVisitorAbstract
     {
         $nodeFinder = new NodeFinder();
 
-
+        /** @var array<ClassMethod> */
         $classMethods = $nodeFinder->find($nodes, fn (Node $node) => $node instanceof ClassMethod && $this->filter($node));
 
         foreach ($classMethods as $classMethod) {
