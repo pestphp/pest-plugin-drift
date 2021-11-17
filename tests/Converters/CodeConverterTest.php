@@ -452,3 +452,453 @@ it('convert assertNotNull to Pest expectation', function () {
 
     expect($convertedCode)->toContain('expect(null)->not->toBeNull()');
 });
+
+it('convert assertFalse to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_false()
+            {
+                $this->assertFalse(false);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(false)->toBeFalse()');
+});
+
+it('convert assertGreaterThan to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_greater_than()
+            {
+                $this->assertGreaterThan(10, 20);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(20)->toBeGreaterThan(10)');
+});
+
+it('convert assertGreaterThanOrEqual to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_greater_than_or_equal()
+            {
+                $this->assertGreaterThanOrEqual(10, 20);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(20)->toBeGreaterThanOrEqual(10)');
+});
+
+it('convert assertLessThan to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_less_than()
+            {
+                $this->assertLessThan(10, 20);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(20)->toBeLessThan(10)');
+});
+
+it('convert assertLessThanOrEqual to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_less_than_or_equal()
+            {
+                $this->assertLessThanOrEqual(10, 20);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(20)->toBeLessThanOrEqual(10)');
+});
+
+it('convert assertCount to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_count()
+            {
+                $this->assertCount(10, []);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect([])->toHaveCount(10)');
+});
+
+it('convert assertEqualsCanonicalizing to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_equals_canonicalizing()
+            {
+                $this->assertEqualsCanonicalizing([1, 2], [2, 1]);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect([2, 1])->toEqualCanonicalizing([1, 2])');
+});
+
+it('convert assertEqualsWithDelta to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_equals_with_delta()
+            {
+                $this->assertEqualsWithDelta(10, 14, 5);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(14)->toEqualWithDelta(10, 5)');
+});
+
+it('convert assertInfinite to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_infinite()
+            {
+                $this->assertInfinite(10);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(10)->toBeInfinite()');
+});
+
+it('convert assertIsBool to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_bool()
+            {
+                $this->assertIsBool(true);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(true)->toBeBool()');
+});
+
+it('convert assertIsCallable to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_callable()
+            {
+                $this->assertIsCallable(true);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(true)->toBeCallable()');
+});
+
+it('convert assertIsFloat to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_float()
+            {
+                $this->assertIsFloat(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeFloat()');
+});
+
+it('convert assertIsInt to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_int()
+            {
+                $this->assertIsInt(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeInt()');
+});
+
+it('convert assertIsIterable to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_iterable()
+            {
+                $this->assertIsIterable([1]);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect([1])->toBeIterable()');
+});
+
+it('convert assertIsNumeric to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_numeric()
+            {
+                $this->assertIsNumeric(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeNumeric()');
+});
+
+it('convert assertIsObject to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_object()
+            {
+                $this->assertIsObject(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeObject()');
+});
+
+it('convert assertIsResource to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_resource()
+            {
+                $this->assertIsResource(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeResource()');
+});
+
+it('convert assertIsScalar to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_is_scalar()
+            {
+                $this->assertIsScalar(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeScalar()');
+});
+
+it('convert assertJson to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_json()
+            {
+                $this->assertJson(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeJson()');
+});
+
+it('convert assertNan to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_nan()
+            {
+                $this->assertNan(1);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(1)->toBeNan()');
+});
+
+it('convert assertDirectoryExists to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_directory_exists()
+            {
+                $this->assertDirectoryExists("/my_directory");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("/my_directory")->toBeDirectory()');
+});
+
+it('convert assertDirectoryIsReadable to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_directory_is_readable()
+            {
+                $this->assertDirectoryIsReadable("/my_directory");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("/my_directory")->toBeReadableDirectory()');
+});
+
+it('convert assertDirectoryIsWritable to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_directory_is_writable()
+            {
+                $this->assertDirectoryIsWritable("/my_directory");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("/my_directory")->toBeWritableDirectory()');
+});
+
+it('convert assertFileExists to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_to_be_file()
+            {
+                $this->assertFileExists("/my_file");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("/my_file")->toBeFile()');
+});
+
+it('convert assertFileIsReadable to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_file_is_readable()
+            {
+                $this->assertFileIsReadable("/my_file");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("/my_file")->toBeReadableFile()');
+});
+
+it('convert assertFileIsWritable to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_file_is_writable()
+            {
+                $this->assertFileIsWritable("/my_file");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("/my_file")->toBeWritableFile()');
+});
+
+it('convert assertMatchesRegularExpression to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_matches_regular_expression()
+            {
+                $this->assertMatchesRegularExpression("/^hello wo.*$/i", "Hello World");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("Hello World")->toMatch("/^hello wo.*$/i")');
+});
+
+it('convert assertThat to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_that()
+            {
+                $this->assertThat(new IsTrue(), true);
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect(true)->toMatchConstraint(new IsTrue())');
+});
+
+it('convert assertStringStartsWith to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_string_starts_with()
+            {
+                $this->assertStringStartsWith("Hello", "Hello World");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("Hello World")->toStartWith("Hello")');
+});
+
+it('convert assertStringEndsWith to PestExpectation', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_assert_string_ends_with()
+            {
+                $this->assertStringEndsWith("Hello", "Hello World");
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('expect("Hello World")->toEndWith("Hello")');
+});

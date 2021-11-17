@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace PestConverter\Rules\Assertions;
 
-final class AssertArrayHasKey extends AbstractAssertionToExpectation
+final class AssertStringEndsWith extends AbstractAssertionToExpectation
 {
     protected function assertionName(): string
     {
-        return 'assertArrayHasKey';
+        return 'assertStringEndsWith';
     }
 
     protected function expectationName(): string
     {
-        return 'toHaveKey';
+        return 'toEndWith';
     }
 }

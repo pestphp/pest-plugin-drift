@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace PestConverter\Rules\Assertions;
 
-final class AssertArrayHasKey extends AbstractAssertionToExpectation
+final class AssertIsFloat extends AbstractAssertionToExpectation
 {
     protected function assertionName(): string
     {
-        return 'assertArrayHasKey';
+        return 'assertIsFloat';
     }
 
     protected function expectationName(): string
     {
-        return 'toHaveKey';
+        return 'toBeFloat';
     }
 }

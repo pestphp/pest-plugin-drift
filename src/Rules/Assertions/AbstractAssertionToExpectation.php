@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace PestConverter\Rules\Assertions;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -58,7 +58,13 @@ abstract class AbstractAssertionToExpectation extends NodeVisitorAbstract
      */
     protected function expected(array $args): array
     {
-        return [];
+        if (1 === count($args)) {
+            return [];
+        }
+
+        unset($args[1]);
+
+        return $args;
     }
 
     protected function isNegative(): bool
@@ -71,7 +77,10 @@ abstract class AbstractAssertionToExpectation extends NodeVisitorAbstract
      *
      * @param array<Arg|VariadicPlaceholder> $args
      */
-    abstract protected function actual(array $args): Arg|VariadicPlaceholder;
+    protected function actual(array $args): Arg|VariadicPlaceholder
+    {
+        return 1 === count($args) ? $args[0] : $args[1];
+    }
 
     abstract protected function expectationName(): string;
 
