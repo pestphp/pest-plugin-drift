@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PestConverter\Rules;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
@@ -30,6 +31,14 @@ final class ConvertTestMethod extends NodeVisitorAbstract
 
         $methodName = $node->name->toString();
 
+        $attributes = $node->getAttributes();
+
+        if ($node->hasAttribute('comments')) {
+            $attributes['comments'] = array_filter($attributes['comments'], static function (Comment $comment) {
+                return $comment->getText() !== '/** @test */';
+            });
+        }
+
         $newNode = new Expression(new FuncCall(
             new Name($this->guessFunctionCall($methodName)),
             [
@@ -38,7 +47,7 @@ final class ConvertTestMethod extends NodeVisitorAbstract
                     'stmts' => $node->stmts,
                 ])),
             ]
-        ), $node->getAttributes());
+        ), $attributes);
 
         return $newNode;
     }
