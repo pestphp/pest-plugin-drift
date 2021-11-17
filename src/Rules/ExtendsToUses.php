@@ -18,12 +18,17 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class ExtendsToUses extends NodeVisitorAbstract
 {
+    private array $excludedTestCase = [
+        'PHPUnit\Framework\TestCase',
+        'Tests\TestCase',
+    ];
+
     /**
      * @inheritDoc
      */
     public function enterNode(Node $node)
     {
-        if (! $node instanceof Class_ || $node->extends === null || $node->extends->getAttribute('resolvedName')->toString() === 'PHPUnit\Framework\TestCase') {
+        if (! $node instanceof Class_ || $node->extends === null || in_array($node->extends->getAttribute('resolvedName')->toString(), $this->excludedTestCase)) {
             return null;
         }
 
