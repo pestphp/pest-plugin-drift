@@ -85,20 +85,34 @@ it('convert phpunit class method to pest function call', function () {
         ->not->toContain('/** @test */');
 });
 
-it('convert lyfecyle method', function () {
+it('convert lifecyle method', function () {
     $code = '<?php
         class MyTest {
-            protected function setUp() {}
-            protected function tearDown() {}
+            protected function setUp() {
+                parent::setUp();
+            }
+            protected function setUpBeforeClass() {
+                parent::setUpBeforeClass();
+            }
+            protected function tearDown() {
+                parent::tearDown();
+            }
+            protected function tearDownAfterClass() {
+                parent::tearDownAfterClass();
+            }
         }
     ';
 
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain("beforeEach");
-    expect($convertedCode)->toContain("beforeEach");
+    expect($convertedCode)->toContain("beforeAll");
+    expect($convertedCode)->toContain("afterEach");
+    expect($convertedCode)->toContain("afterAll");
     expect($convertedCode)->not->toContain("setUp");
+    expect($convertedCode)->not->toContain("setUpBeforeClass");
     expect($convertedCode)->not->toContain("tearDown");
+    expect($convertedCode)->not->toContain("tearDownAfterClass");
 });
 
 it('convert non test method', function () {

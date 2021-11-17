@@ -8,7 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
@@ -27,14 +30,21 @@ abstract class AbstractConvertLifecycleMethod extends NodeVisitorAbstract
             return null;
         }
 
+        $stmts = array_filter($node->stmts ?? [], function (Stmt $stmt) {
+            return ! ($stmt instanceof Expression &&
+                $stmt->expr instanceof StaticCall &&
+                $stmt->expr->name instanceof Identifier &&
+                $stmt->expr->name->toString() === $this->lifecycleMethodName());
+        });
+
         return new Expression(new FuncCall(
             new Name($this->newName()),
             [
                 new Arg(new Closure([
-                    'stmts' => $node->stmts,
+                    'stmts' => $stmts,
                 ])),
             ]
-        ));
+        ), $node->getAttributes());
     }
 
     abstract protected function lifecycleMethodName(): string;
