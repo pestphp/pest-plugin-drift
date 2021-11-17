@@ -27,11 +27,14 @@ final class ExtendsToUses extends NodeVisitorAbstract
             return null;
         }
 
+        $resolvedName = $node->extends->getAttribute('resolvedName');
+        $resolvedName->setAttributes([]);
+
         $usesStmt = new Expression(
             new FuncCall(
                 new Name('uses'),
                 [
-                    new Arg(new ClassConstFetch($node->extends->getAttribute('resolvedName'), 'class')),
+                    new Arg(new ClassConstFetch($resolvedName, 'class')),
                 ]
             )
         );

@@ -38,9 +38,7 @@ final class ConvertTestMethod extends NodeVisitorAbstract
                     'stmts' => $node->stmts,
                 ])),
             ]
-        ));
-
-        $newNode->setAttribute('original_node', $node);
+        ), $node->getAttributes());
 
         return $newNode;
     }

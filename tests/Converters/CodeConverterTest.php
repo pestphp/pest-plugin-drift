@@ -46,8 +46,9 @@ it('convert extends class to uses method', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->not->toContain('use PestConverter\Tests\Fixtures\FixtureTestCase;');
-    expect($convertedCode)->toContain("uses(\PestConverter\Tests\Fixtures\FixtureTestCase::class);");
+    expect($convertedCode)
+        ->not->toContain('use PestConverter\Tests\Fixtures\FixtureTestCase;')
+        ->toContain("uses(\PestConverter\Tests\Fixtures\FixtureTestCase::class);");
 });
 
 it('doesnt convert extends PhpUnit TestCase', function () {
@@ -166,6 +167,74 @@ it('add missing use', function () {
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->toContain('use \PestConverter\Tests\Bar;');
+});
+
+it('keep multiline statements', function () {
+    $code = '<?php
+        class MyTest {
+            public function multiline_statement()
+            {
+                $object
+                    ->foo()
+                    ->bar()
+                    ->hello(
+                        $the,
+                        $world
+                    );
+
+                $alpha = "beta";
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '
+    $object
+        ->foo()
+        ->bar()
+        ->hello(
+            $the,
+            $world
+        );
+
+    $alpha = "beta";';
+
+    expect($convertedCode)->toContain($expected);
+});
+
+it('keep breakline between methods', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_method()
+            {
+            }
+
+            public function first_method()
+            {
+            }
+
+            public function second_method()
+            {
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = "
+test('method', function () {
+});
+
+function first_method()
+{
+}
+
+function second_method()
+{
+}";
+
+    expect($convertedCode)->toContain($expected);
 });
 
 it('convert assertEquals to Pest expectation', function () {

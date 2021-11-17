@@ -65,10 +65,9 @@ final class ConvertNonTestMethod extends NodeVisitorAbstract
                 'returnType' => $classMethod->returnType,
                 'stmts' => $classMethod->stmts,
                 'attrGroups' => $classMethod->attrGroups,
-            ]
+            ],
+            $classMethod->getAttributes()
         );
-
-        $newNode->setAttribute('original_node', $classMethod);
 
         return $newNode;
     }

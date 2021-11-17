@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace PestConverter\Converters;
 
 use PestConverter\Parser\PrettyPrinter\Standard;
-use PestConverter\Parser\Visitors\OriginalNodeVisitor;
+use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use PhpParser\ParserFactory;
+use PhpParser\Parser\Php7;
 
 final class CodeConverterFactory
 {
@@ -20,20 +21,28 @@ final class CodeConverterFactory
     {
         $visitors = require __DIR__ . '/../../config/rules.php';
 
+        $lexer = new Emulative([
+            'usedAttributes' => [
+                'comments',
+                'startLine', 'endLine',
+                'startTokenPos', 'endTokenPos',
+            ],
+        ]);
+
         $nodeTraverser = new NodeTraverser();
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $parser = new Php7($lexer);
         $prettyPrinter = new Standard();
 
         $nodeTraverser->addVisitor(new NodeConnectingVisitor());
         $nodeTraverser->addVisitor(new NameResolver(null, [
             'replaceNodes' => false,
         ]));
-        $nodeTraverser->addVisitor(new OriginalNodeVisitor());
+        $nodeTraverser->addVisitor(new CloningVisitor());
 
         foreach ($visitors as $visitor) {
             $nodeTraverser->addVisitor($visitor);
         }
 
-        return new CodeConverter($parser, $nodeTraverser, $prettyPrinter);
+        return new CodeConverter($parser, $nodeTraverser, $prettyPrinter, $lexer);
     }
 }
