@@ -14,29 +14,23 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeVisitorAbstract;
 
 /**
- * Check if the node is a lifecycle hook method.
+ * Convert PHPUnit assertions to Pest Expectations.
  */
-abstract class AbstractConvertLifecycleMethod extends NodeVisitorAbstract
+abstract class AbstractConvertLifecycleMethod extends AbstractConvertClassMethod
 {
-    /**
-     * @inheritDoc
-     */
-    public function leaveNode(Node $node)
+    protected function apply(ClassMethod $classMethod): int|Node|array|null
     {
-        if (! $node instanceof ClassMethod || $node->name->name !== $this->lifecycleMethodName()) {
-            return null;
-        }
-
-        $stmts = array_filter($node->stmts ?? [], function (Stmt $stmt) {
+        // Remove parent lifecyle call.
+        $stmts = array_filter($classMethod->stmts ?? [], function (Stmt $stmt) {
             return ! ($stmt instanceof Expression &&
                 $stmt->expr instanceof StaticCall &&
                 $stmt->expr->name instanceof Identifier &&
                 $stmt->expr->name->toString() === $this->lifecycleMethodName());
         });
 
+        // Build Pest lifecycle Method.
         return new Expression(new FuncCall(
             new Name($this->newName()),
             [
@@ -44,10 +38,21 @@ abstract class AbstractConvertLifecycleMethod extends NodeVisitorAbstract
                     'stmts' => $stmts,
                 ])),
             ]
-        ), $node->getAttributes());
+        ), $classMethod->getAttributes());
     }
 
+    protected function filter(ClassMethod $classMethod): bool
+    {
+        return $classMethod->name->name === $this->lifecycleMethodName();
+    }
+
+    /**
+     * Get PHPUnit lifecycle method name.
+     */
     abstract protected function lifecycleMethodName(): string;
 
+    /**
+     * Get Pest lifecycle method name.
+     */
     abstract protected function newName(): string;
 }

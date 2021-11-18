@@ -9,6 +9,9 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
+/**
+ * Remove unnecessary properties.
+ */
 final class RemoveProperties extends NodeVisitorAbstract
 {
     /**

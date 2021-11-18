@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PestConverter\Rules;
 
 /**
- * Replace setUp method with beforeEach call.
+ * Replace setUpBeforeClass method with beforeAll call.
  */
 final class SetUpBeforeClassToBeforeAll extends AbstractConvertLifecycleMethod
 {

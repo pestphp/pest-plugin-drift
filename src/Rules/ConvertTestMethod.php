@@ -13,57 +13,47 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeVisitorAbstract;
 
 /**
- * Replace test class method with it function call.
+ * Replace test class method with it or test function call.
  */
-final class ConvertTestMethod extends NodeVisitorAbstract
+final class ConvertTestMethod extends AbstractConvertClassMethod
 {
-    /**
-     * @inheritDoc
-     */
-    public function leaveNode(Node $node)
+    protected function apply(ClassMethod $classMethod): int|Node|array|null
     {
-        if (! $node instanceof ClassMethod || ! $this->filter($node)) {
-            return null;
-        }
+        $methodName = $classMethod->name->toString();
+        $attributes = $classMethod->getAttributes();
 
-        $methodName = $node->name->toString();
-
-        $attributes = $node->getAttributes();
-
-        if ($node->hasAttribute('comments')) {
+        // Remove unnecessary comments.
+        if ($classMethod->hasAttribute('comments')) {
             $attributes['comments'] = array_filter($attributes['comments'], static function (Comment $comment) {
                 return $comment->getText() !== '/** @test */';
             });
         }
 
-        $newNode = new Expression(new FuncCall(
+        // Build test function.
+        return new Expression(new FuncCall(
             new Name($this->guessFunctionCall($methodName)),
             [
                 new Arg(new String_($this->methodNameToDescription($methodName))),
                 new Arg(new Closure([
-                    'stmts' => $node->stmts,
+                    'stmts' => $classMethod->stmts,
                 ])),
             ]
         ), $attributes);
-
-        return $newNode;
     }
 
+    /**
+     * Filter class methods to convert.
+     */
     protected function filter(ClassMethod $classMethod): bool
     {
-        return $this->isTestMethod($classMethod);
+        return $this->classMethodAnalyzer->isTestMethod($classMethod);
     }
 
-    private function isTestMethod(ClassMethod $classMethod): bool
-    {
-        $comments = $classMethod->getComments();
-
-        return str_starts_with($classMethod->name->toString(), 'test') || in_array('/** @test */', $comments);
-    }
-
+    /**
+     * Extract Pest description from method name.
+     */
     private function methodNameToDescription(string $name): string
     {
         $newName = preg_replace(
@@ -75,6 +65,9 @@ final class ConvertTestMethod extends NodeVisitorAbstract
         return trim(strtolower($newName));
     }
 
+    /**
+     * Guess if the test function call must be 'test' or 'it'.
+     */
     private function guessFunctionCall(string $methodName): string
     {
         if (str_starts_with($methodName, 'it')) {

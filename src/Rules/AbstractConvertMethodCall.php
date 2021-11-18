@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace PestConverter\Rules;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\NodeVisitorAbstract;
+
+abstract class AbstractConvertMethodCall extends NodeVisitorAbstract
+{
+    /**
+     * @inheritDoc
+     */
+    final public function enterNode(Node $node)
+    {
+        if (! $node instanceof MethodCall) {
+            return null;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    final public function leaveNode(Node $node)
+    {
+        if (! $node instanceof MethodCall) {
+            return null;
+        }
+
+        return $this->apply($node);
+    }
+
+    /**
+     * @return int|Node|array<Node>|null Replacement node (or special return value)
+     */
+    abstract protected function apply(MethodCall $methodCall): int|Node|array|null;
+}

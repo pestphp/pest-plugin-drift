@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PestConverter\Rules;
 
 /**
- * Replace tearDown method with afterEach call.
+ * Replace tearDownAfterClass method with afterAll call.
  */
 final class TearDownAfterClassToAfterAll extends AbstractConvertLifecycleMethod
 {

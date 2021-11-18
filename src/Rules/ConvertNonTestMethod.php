@@ -5,59 +5,33 @@ declare(strict_types=1);
 namespace PestConverter\Rules;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\NodeFinder;
-use PhpParser\NodeVisitorAbstract;
 
 /**
- * Replace non test class method with it function call.
+ * Replace non test class method with function.
  */
-final class ConvertNonTestMethod extends NodeVisitorAbstract
+final class ConvertNonTestMethod extends AbstractConvertClassMethod
 {
-    private array $classMethodsToConvert = [];
-
-    /**
-     * @inheritDoc
-     */
-    public function beforeTraverse(array $nodes): void
+    protected function apply(ClassMethod $classMethod): int|Node|array|null
     {
-        $nodeFinder = new NodeFinder();
-
-        /** @var array<ClassMethod> */
-        $classMethods = $nodeFinder->find($nodes, fn (Node $node) => $node instanceof ClassMethod && $this->filter($node));
-
-        foreach ($classMethods as $classMethod) {
-            $this->classMethodsToConvert[] = $classMethod->name->toString();
-        }
+        return $this->convertClassMethod($classMethod);
     }
 
     /**
-     * @inheritDoc
+     * Filter methods to convert.
      */
-    public function leaveNode(Node $node)
-    {
-        if ($node instanceof ClassMethod && in_array($node->name->toString(), $this->classMethodsToConvert)) {
-            return $this->convertClassMethod($node);
-        }
-
-        if ($node instanceof MethodCall) {
-            return $this->convertMethodCall($node);
-        }
-    }
-
     protected function filter(ClassMethod $classMethod): bool
     {
-        return ! $this->isTestMethod($classMethod) && ! $this->isLifecycleMethod($classMethod);
+        return ! $this->classMethodAnalyzer->isTestMethod($classMethod) && ! $this->classMethodAnalyzer->isLifecycleMethod($classMethod);
     }
 
+    /**
+     * Convert class method to function.
+     */
     private function convertClassMethod(ClassMethod $classMethod): Function_
     {
-        $newNode = new Function_(
+        return new Function_(
             $classMethod->name,
             [
                 'byRef' => $classMethod->byRef,
@@ -68,37 +42,5 @@ final class ConvertNonTestMethod extends NodeVisitorAbstract
             ],
             $classMethod->getAttributes()
         );
-
-        return $newNode;
-    }
-
-    private function convertMethodCall(MethodCall $methodCall): ?FuncCall
-    {
-        if (! $methodCall->name instanceof Identifier || ! in_array($methodCall->name->toString(), $this->classMethodsToConvert)) {
-            return null;
-        }
-
-        return new FuncCall(
-            new Name($methodCall->name->toString()),
-            $methodCall->getArgs(),
-            $methodCall->getAttributes()
-        );
-    }
-
-    private function isLifecycleMethod(ClassMethod $classMethod): bool
-    {
-        return in_array($classMethod->name->toString(), [
-            'setUp',
-            'setUpBeforeClass',
-            'tearDown',
-            'tearDownAfterClass',
-        ]);
-    }
-
-    private function isTestMethod(ClassMethod $classMethod): bool
-    {
-        $comments = $classMethod->getComments();
-
-        return str_starts_with($classMethod->name->toString(), 'test') || in_array('/** @test */', $comments);
     }
 }

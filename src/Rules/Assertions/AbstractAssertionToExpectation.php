@@ -4,48 +4,50 @@ declare(strict_types=1);
 
 namespace PestConverter\Rules\Assertions;
 
+use PestConverter\Rules\AbstractConvertMethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\VariadicPlaceholder;
-use PhpParser\NodeVisitorAbstract;
 
-abstract class AbstractAssertionToExpectation extends NodeVisitorAbstract
+abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
 {
-    /**
-     * @inheritDoc
-     */
-    public function leaveNode(Node $node)
+    public function __construct(
+        protected string $oldName,
+        protected string $newName,
+    ) {
+    }
+
+    protected function apply(MethodCall $methodCall): int|Node|array|null
     {
-        if (! $node instanceof MethodCall || ! $node->name instanceof Identifier) {
+        if (! $methodCall->name instanceof Identifier) {
             return null;
         }
 
-        $assertionName = $node->name->name;
+        $assertionName = $methodCall->name->name;
 
-        if ($assertionName !== $this->assertionName()) {
+        if ($assertionName !== $this->oldName) {
             return null;
-        }
-
-        $expect = new FuncCall(
-            new Name('expect'),
-            [
-                $this->actual($node->args),
-            ]
-        );
-
-        if ($this->isNegative()) {
-            $expect = new PropertyFetch($expect, 'not');
         }
 
         return new MethodCall(
-            $expect,
-            new Identifier($this->expectationName()),
-            $this->expected($node->args)
+            $this->buildExpect($methodCall),
+            new Identifier($this->newName),
+            $this->expected($methodCall->args)
+        );
+    }
+
+    protected function buildExpect(MethodCall $methodCall): Expr
+    {
+        return new FuncCall(
+            new Name('expect'),
+            [
+                $this->actual($methodCall->args),
+            ]
         );
     }
 
@@ -56,9 +58,9 @@ abstract class AbstractAssertionToExpectation extends NodeVisitorAbstract
      *
      * @return array<Arg|VariadicPlaceholder>
      */
-    protected function expected(array $args): array
+    private function expected(array $args): array
     {
-        if (1 === count($args)) {
+        if (count($args) === 1) {
             return [];
         }
 
@@ -67,22 +69,13 @@ abstract class AbstractAssertionToExpectation extends NodeVisitorAbstract
         return $args;
     }
 
-    protected function isNegative(): bool
-    {
-        return false;
-    }
-
     /**
      * Extract the actual argument to test.
      *
      * @param array<Arg|VariadicPlaceholder> $args
      */
-    protected function actual(array $args): Arg|VariadicPlaceholder
+    private function actual(array $args): Arg|VariadicPlaceholder
     {
-        return 1 === count($args) ? $args[0] : $args[1];
+        return count($args) === 1 ? $args[0] : $args[1];
     }
-
-    abstract protected function expectationName(): string;
-
-    abstract protected function assertionName(): string;
 }

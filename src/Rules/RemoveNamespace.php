@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Remove the namespace of the file.
+ * Remove the namespace of the class.
  */
 final class RemoveNamespace extends NodeVisitorAbstract
 {
