@@ -33,12 +33,9 @@
     "bin": [
         "bin/pest-converter"
     ],
-    "scripts": {
-        "test": "pest",
-        "test:coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage",
-        "psalm": "psalm",
-        "psalm:info": "psalm --show-info=true",
-        "lint": "php-cs-fixer fix --config=.php_cs.dist.php -v --dry-run",
-        "lint:fix": "php-cs-fixer fix --config=.php_cs.dist.php -v"
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
