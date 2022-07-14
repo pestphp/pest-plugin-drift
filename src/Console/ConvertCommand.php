@@ -27,7 +27,13 @@ final class ConvertCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $finder = new Finder($input->getArgument('dir'), $input->getOption('exclude'));
+        $symfonyStyle = new SymfonyStyle($input, $output);
+
+        $testsDirectory = $input->getArgument('dir');
+
+        $symfonyStyle->info("Start converting files from: $testsDirectory");
+
+        $finder = new Finder($testsDirectory, $input->getOption('exclude'));
 
         $outputDir = $input->getOption('output') ?? $input->getArgument('dir');
 
@@ -37,9 +43,7 @@ final class ConvertCommand extends Command
 
         $directoryConverter->convert($finder);
 
-        $symfonyStyle = new SymfonyStyle($input, $output);
-
-        $symfonyStyle->success('Done!');
+        $symfonyStyle->info("Done! {$finder->count()} files have been processed.");
 
         return Command::SUCCESS;
     }
