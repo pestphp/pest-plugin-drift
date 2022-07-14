@@ -14,8 +14,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-versions: [ 8.0, 8.1 ]
-                stability: [prefer-lowest, prefer-stable]
+                php-versions: [ 8.0 ]
+                stability: [prefer-stable]
         steps:
             -   name: Checkout
                 uses: actions/checkout@v3
@@ -39,9 +39,6 @@ jobs:
             # Smoke test
             -   name: Ensure the PHAR works
                 run: ./pest-converter.phar --version
-
-            -   name: Ensure the PHAR is scoped
-                run: ./pest-converter.phar help | php -r 'if (!str_starts_with(stream_get_contents(STDIN), "PestConverter")) exit (1);'
 
             -   uses: actions/upload-artifact@v3
                 name: Upload the PHAR artifact
