@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -23,24 +24,34 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     {
         $methodName = $classMethod->name->toString();
         $attributes = $classMethod->getAttributes();
+        $dependsArgument = [];
 
-        // Remove unnecessary comments.
         if ($classMethod->hasAttribute('comments')) {
-            $attributes['comments'] = array_filter($attributes['comments'], static function (Comment $comment) {
-                return $comment->getText() !== '/** @test */';
-            });
+            $dependsArgument = $this->extractDependsArgument($attributes['comments']);
+            $attributes['comments'] = $this->cleanComments($attributes['comments']);
         }
 
         // Build test function.
-        return new Expression(new FuncCall(
+        $testCall = new FuncCall(
             new Name($this->guessFunctionCall($methodName)),
             [
                 new Arg(new String_($this->methodNameToDescription($methodName))),
                 new Arg(new Closure([
-                    'stmts' => $classMethod->stmts,
+                        'stmts' => $classMethod->stmts,
+                        'params' => $classMethod->getParams(),
                 ])),
             ]
-        ), $attributes);
+        );
+
+        if (count($dependsArgument) !== 0) {
+            $testCall = new MethodCall(
+                $testCall,
+                'depends',
+                $dependsArgument
+            );
+        }
+
+        return new Expression($testCall, $attributes);
     }
 
     /**
@@ -49,6 +60,54 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     protected function filter(ClassMethod $classMethod): bool
     {
         return $this->classMethodAnalyzer->isTestMethod($classMethod);
+    }
+
+    /**
+     * Remove unnecessary annotations and clean empty comments
+     */
+    private function cleanComments(array $comments): array
+    {
+        // Remove unnecessary comments.
+        $comments = array_map(static function (Comment $comment) {
+            $text = $comment->getText();
+            $text = preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
+            $text = preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
+
+            return new Comment($text, $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
+        }, $comments);
+
+        // Remove empty comments
+        $comments = array_filter($comments, static function (Comment $comment) {
+            return preg_match('|^/\*[\s\*]*\*+/$|', $comment->getText()) == 0;
+        });
+
+        return $comments;
+    }
+
+    /**
+     * Search @depends annotations in comments and build depends argument with them.
+     *
+     * @param array $comments
+     * @return array
+     */
+    private function extractDependsArgument(array $comments): array
+    {
+        $dependsArgument = [];
+
+        $dependAnnotations = array_filter($comments, static function (Comment $comment) {
+            return str_contains($comment->getText(), '@depends');
+        });
+
+        foreach ($dependAnnotations as $dependAnnotation) {
+            preg_match_all("/@depends ([^ ]*) *$/m", $dependAnnotation->getText(), $matches);
+
+
+            $dependsArgument = array_map(function ($testName) {
+                return new Arg(new String_($this->methodNameToDescription($testName)));
+            }, $matches[1]);
+        }
+
+        return $dependsArgument;
     }
 
     /**

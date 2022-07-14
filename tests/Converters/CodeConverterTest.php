@@ -902,3 +902,68 @@ it('convert assertStringEndsWith to PestExpectation', function () {
 
     expect($convertedCode)->toContain('expect("Hello World")->toEndWith("Hello")');
 });
+
+it('convert @depends to pest depends', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_one()
+            {
+                $foo = "foo";
+
+                return $foo;
+            }
+
+            /**
+             * @depends test_one
+             */
+            public function test_two($foo)
+            {
+
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain('function ($foo)')
+        ->not->toContain('@depends test_one')
+        ->toContain("->depends('one')");
+});
+
+it('can convert multiple @depends to pest depends', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_one()
+            {
+                $foo = "foo";
+
+                return $foo;
+            }
+
+            public function test_two()
+            {
+                $bar = "bar";
+
+                return $bar;
+            }
+
+            /**
+             * @depends test_one
+             * @depends test_two
+             */
+            public function test_three($foo, $bar)
+            {
+
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain('function ($foo, $bar)')
+        ->not->toContain('@depends test_one')
+        ->not->toContain('@depends test_two')
+        ->toContain("->depends('one', 'two')");
+});
