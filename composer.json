@@ -28,14 +28,26 @@
         "friendsofphp/php-cs-fixer": "^3.1",
         "vimeo/psalm": "^4.10",
         "pestphp/pest": "^1.20",
-        "composer/composer": "dev-main"
+        "composer/composer": "dev-main",
+        "bamarni/composer-bin-plugin": "^1.7"
     },
     "bin": [
         "bin/pest-converter"
     ],
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "scripts": {
+        "bin": "echo 'bin not installed'",
+        "post-install-cmd": ["@composer bin all install --ansi"],
+        "post-update-cmd": ["@composer bin all update --ansi"]
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": false
         }
     }
 }

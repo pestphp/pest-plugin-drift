@@ -1,0 +1,68 @@
+name: Build
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+    release:
+        types: [ created ]
+
+jobs:
+    build-phar:
+        runs-on: ubuntu-latest
+        name: Build PHAR
+        strategy:
+            fail-fast: false
+            matrix:
+                php-versions: [ 8.0, 8.1 ]
+                stability: [prefer-lowest, prefer-stable]
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-versions }}
+                    ini-values: phar.readonly=0
+                    coverage: none
+                    tools: composer:v2
+
+            -   name: Install Composer dependencies
+                run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
+            -   name: Build PHAR
+                run: make pest-converter.phar
+
+            # Smoke test
+            -   name: Ensure the PHAR works
+                run: ./pest-converter.phar --version
+
+            -   name: Ensure the PHAR is scoped
+                run: ./pest-converter.phar help | php -r 'if (!str_starts_with(stream_get_contents(STDIN), "PestConverter")) exit (1);'
+
+            -   uses: actions/upload-artifact@v3
+                name: Upload the PHAR artifact
+                with:
+                    name: pest-converter-phar
+                    path: pest-converter.phar
+
+    publish-phar:
+        runs-on: ubuntu-latest
+        name: Publish the PHAR
+        needs:
+            - 'build-phar'
+        if: github.event_name == 'release'
+        steps:
+            -   uses: actions/download-artifact@v3
+                with:
+                    name: pest-converter-phar
+                    path: .
+
+            -   name: Upload pest-converter.phar
+                uses: softprops/action-gh-release@v1
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    files: pest-converter.phar

@@ -1,5 +1,7 @@
-/vendor
+/vendor/
+/vendor-bin/**/vendor
 /build
+/pest-converter.phar
 .php-cs-fixer.cache
 .phpunit.result.cache
-composer.lock
+/composer.lock

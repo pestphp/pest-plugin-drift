@@ -22,6 +22,8 @@ You can install the package via composer:
 composer global require mandisma/pest-converter
 ```
 
+Or directly download the PHAR file to avoid any dependencies conflict issue : [Github Releases](https://github.com/mandisma/pest-converter/releases)
+
 ## Usage
 
 ```bash
@@ -35,7 +37,7 @@ pest-converter convert your_tests_directory
 ## Testing
 
 ```bash
-composer test
+make test
 ```
 
 ## Contributing

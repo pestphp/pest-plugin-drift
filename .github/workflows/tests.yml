@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Tests
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [8.0]
+        php-versions: [ 8.0, 8.1 ]
         stability: [prefer-lowest, prefer-stable]
 
     name: PHP ${{ matrix.php-versions }} - ${{ matrix.stability }}
@@ -35,10 +35,10 @@ jobs:
       run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
     - name: Run PHPCS
-      run: composer lint
+      run: make lint
 
     - name: Run Psalm
-      run: composer psalm
+      run: make psalm
 
     - name: Run test suite
-      run: vendor/bin/pest
+      run: make test
