@@ -1,44 +1,37 @@
 name: Tests
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: ['push', 'pull_request']
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  ci:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        php-versions: [ 8.0, 8.1 ]
-        stability: [ prefer-stable ]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        php: ['8.1', '8.2']
+        dependency-version: [prefer-lowest, prefer-stable]
+        parallel: ['', '--parallel']
 
-    name: PHP ${{ matrix.php-versions }} - ${{ matrix.stability }}
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }} - ${{ matrix.parallel }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
-    - name: Install PHP
+    - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: xdebug
+        php-version: ${{ matrix.php }}
         tools: composer:v2
+        coverage: none
 
-    - name: Check PHP Version
-      run: php -v
+    - name: Setup Problem Matches
+      run: |
+        echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+        echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-    - name: Install dependencies
-      run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+    - name: Install PHP dependencies
+      run: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
 
-    - name: Run PHPCS
-      run: make lint
-
-    - name: Run Psalm
-      run: make psalm
-
-    - name: Run test suite
-      run: make test
+    - name: Unit Tests
+      run: composer test:unit

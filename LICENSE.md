@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) Mandisma <TODO> and Nuno Maduro <enunomaduro@email.com>
+Copyright (c) Mandisma <mandis68@gmail.com> and Nuno Maduro <enunomaduro@email.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
