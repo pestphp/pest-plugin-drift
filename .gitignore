@@ -1,7 +1,11 @@
+.idea/*
+.idea/codeStyleSettings.xml
+composer.lock
 /vendor/
-/vendor-bin/**/vendor
-/build
-/pest-converter.phar
-.php-cs-fixer.cache
+coverage.xml
 .phpunit.result.cache
-/composer.lock
+/.php-cs-fixer.php
+.php-cs-fixer.cache
+.temp/coverage.php
+*.swp
+*.swo

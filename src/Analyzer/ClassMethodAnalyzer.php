@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Analyzer;
+namespace Pest\Pestify\Analyzer;
 
 use PhpParser\Comment;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -37,10 +37,8 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
      */
     private function containsTestAnnotation(array $comments): bool
     {
-        $testAnnotations = array_filter($comments, static function (Comment $comment) {
-            return str_contains($comment->getText(), '@test');
-        });
+        $testAnnotations = array_filter($comments, static fn (Comment $comment): bool => str_contains($comment->getText(), '@test'));
 
-        return count($testAnnotations) !== 0;
+        return $testAnnotations !== [];
     }
 }

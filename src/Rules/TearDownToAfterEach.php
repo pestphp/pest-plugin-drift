@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 /**
  * Replace tearDown method with afterEach call.

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules\Assertions;
+namespace Pest\Pestify\Rules\Assertions;
 
-use PestConverter\Rules\AbstractConvertMethodCall;
+use Pest\Pestify\Rules\AbstractConvertMethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -54,8 +54,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
     /**
      * Extract the expected arguments.
      *
-     * @param array<Arg|VariadicPlaceholder> $args
-     *
+     * @param  array<Arg|VariadicPlaceholder>  $args
      * @return array<Arg|VariadicPlaceholder>
      */
     private function expected(array $args): array
@@ -72,7 +71,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
     /**
      * Extract the actual argument to test.
      *
-     * @param array<Arg|VariadicPlaceholder> $args
+     * @param  array<Arg|VariadicPlaceholder>  $args
      */
     private function actual(array $args): Arg|VariadicPlaceholder
     {

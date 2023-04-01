@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
-use PestConverter\Parser\NodeFinder\MissingUseFinderInterface;
+use Pest\Pestify\Parser\NodeFinder\MissingUseFinderInterface;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitorAbstract;
@@ -15,12 +15,12 @@ use PhpParser\NodeVisitorAbstract;
 final class AddMissingUse extends NodeVisitorAbstract
 {
     public function __construct(
-        private MissingUseFinderInterface $missingUseFinder,
+        private readonly MissingUseFinderInterface $missingUseFinder,
     ) {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function afterTraverse(array $nodes)
     {

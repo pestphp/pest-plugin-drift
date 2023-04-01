@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Converters;
+namespace Pest\Pestify\Converters;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverserInterface;
@@ -11,17 +11,8 @@ use PhpParser\PrettyPrinterAbstract;
 
 final class CodeConverter
 {
-    private Parser $parser;
-    private NodeTraverserInterface $traverser;
-    private PrettyPrinterAbstract $prettyPrinter;
-    private Emulative $lexer;
-
-    public function __construct(Parser $parser, NodeTraverserInterface $traverser, PrettyPrinterAbstract $prettyPrinter, Emulative $lexer)
+    public function __construct(private readonly Parser $parser, private readonly NodeTraverserInterface $traverser, private readonly PrettyPrinterAbstract $prettyPrinter, private readonly Emulative $lexer)
     {
-        $this->parser = $parser;
-        $this->prettyPrinter = $prettyPrinter;
-        $this->traverser = $traverser;
-        $this->lexer = $lexer;
     }
 
     /**

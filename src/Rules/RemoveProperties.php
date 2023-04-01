@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
@@ -15,7 +15,7 @@ use PhpParser\NodeVisitorAbstract;
 final class RemoveProperties extends NodeVisitorAbstract
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function leaveNode(Node $node)
     {

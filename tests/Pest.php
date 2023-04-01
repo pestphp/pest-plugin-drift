@@ -11,7 +11,6 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
 uses()
     ->beforeAll(fn () => initFixtures())
     ->afterAll(fn () => cleanFixtures())
@@ -54,7 +53,6 @@ function initFixtures()
     mkdir(tmpDir('sources'));
     mkdir(tmpDir('results'));
 
-
     touch(tmpDir('sources/FooTest.php'));
     touch(tmpDir('sources/BarTest.php'));
 
@@ -91,10 +89,9 @@ function cleanFixtures()
     }
 }
 
-
 function tmpDir(string $path = '')
 {
-    $tmpDir = realpath(sys_get_temp_dir()) . '/pest_converter';
+    $tmpDir = realpath(sys_get_temp_dir()).'/pestify';
 
-    return $tmpDir . '/' . $path;
+    return $tmpDir.'/'.$path;
 }

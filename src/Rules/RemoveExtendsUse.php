@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
@@ -13,13 +13,12 @@ use PhpParser\NodeFinder;
 final class RemoveExtendsUse extends AbstractRemoveUse
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function useToRemove(array $nodes): array
     {
         $nodeFinder = new NodeFinder();
 
-        /** @var array<Class_> */
         $classesWithExtends = $nodeFinder->findInstanceOf($nodes, Class_::class);
 
         $toRemove = [];

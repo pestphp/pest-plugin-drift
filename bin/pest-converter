@@ -19,11 +19,11 @@
     require_once $file;
 })();
 
-$application = new \Symfony\Component\Console\Application('PestConverter', 'dev-main');
+$application = new \Symfony\Component\Console\Application('Pest\Pestify', 'dev-main');
 
 $application->addCommands([
-    new \PestConverter\Console\ConvertCommand(),
-    new \PestConverter\Console\InstallPestCommand(),
+    new \Pest\Pestify\Console\ConvertCommand(),
+    new \Pest\Pestify\Console\InstallPestCommand(),
 ]);
 
 exit($application->run());

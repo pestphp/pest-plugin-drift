@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Finder;
+namespace Pest\Pestify\Finder;
 
 interface FinderInterface
 {
     /**
      * Return test files present in directory.
      *
-     * @return array<\PestConverter\Finder\File>
+     * @return array<\Pest\Pestify\Finder\File>
      */
     public function get(): array;
 

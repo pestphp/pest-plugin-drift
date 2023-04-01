@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Analyzer;
+namespace Pest\Pestify\Analyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 

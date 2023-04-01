@@ -2,19 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Converters;
+namespace Pest\Pestify\Converters;
 
-use PestConverter\Finder\FileInterface;
+use Pest\Pestify\Finder\FileInterface;
 
 final class FileConverter
 {
-    private CodeConverter $codeConverter;
-    private string $outputDir;
-
-    public function __construct(CodeConverter $codeConverter, string $outputDir)
+    public function __construct(private readonly CodeConverter $codeConverter, private readonly string $outputDir)
     {
-        $this->codeConverter = $codeConverter;
-        $this->outputDir = $outputDir;
     }
 
     /**
@@ -35,14 +30,14 @@ final class FileConverter
     {
         $outputDir = $this->outputDir;
 
-        if ($file->getRelativePath()) {
-            $outputDir = $this->outputDir . '/' . $file->getRelativePath();
+        if ($file->getRelativePath() !== '' && $file->getRelativePath() !== '0') {
+            $outputDir = $this->outputDir.'/'.$file->getRelativePath();
         }
 
         if (! file_exists($outputDir)) {
             mkdir($outputDir, 0755, true);
         }
 
-        return $outputDir . '/' . $file->getBasename();
+        return $outputDir.'/'.$file->getBasename();
     }
 }

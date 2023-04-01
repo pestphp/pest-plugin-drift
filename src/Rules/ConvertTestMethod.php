@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Comment;
 use PhpParser\Node;
@@ -37,13 +37,13 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
             [
                 new Arg(new String_($this->methodNameToDescription($methodName))),
                 new Arg(new Closure([
-                        'stmts' => $classMethod->stmts,
-                        'params' => $classMethod->getParams(),
+                    'stmts' => $classMethod->stmts,
+                    'params' => $classMethod->getParams(),
                 ])),
             ]
         );
 
-        if (count($dependsArgument) !== 0) {
+        if ($dependsArgument !== []) {
             $testCall = new MethodCall(
                 $testCall,
                 'depends',
@@ -68,7 +68,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     private function cleanComments(array $comments): array
     {
         // Remove unnecessary comments.
-        $comments = array_map(static function (Comment $comment) {
+        $comments = array_map(static function (Comment $comment): Comment {
             $text = $comment->getText();
             $text = preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
             $text = preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
@@ -77,34 +77,24 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
         }, $comments);
 
         // Remove empty comments
-        $comments = array_filter($comments, static function (Comment $comment) {
-            return preg_match('|^/\*[\s\*]*\*+/$|', $comment->getText()) == 0;
-        });
+        $comments = array_filter($comments, static fn (Comment $comment): bool => preg_match('|^/\*[\s\*]*\*+/$|', $comment->getText()) == 0);
 
         return $comments;
     }
 
     /**
      * Search @depends annotations in comments and build depends argument with them.
-     *
-     * @param array $comments
-     * @return array
      */
     private function extractDependsArgument(array $comments): array
     {
         $dependsArgument = [];
 
-        $dependAnnotations = array_filter($comments, static function (Comment $comment) {
-            return str_contains($comment->getText(), '@depends');
-        });
+        $dependAnnotations = array_filter($comments, static fn (Comment $comment): bool => str_contains($comment->getText(), '@depends'));
 
         foreach ($dependAnnotations as $dependAnnotation) {
-            preg_match_all("/@depends ([^ ]*) *$/m", $dependAnnotation->getText(), $matches);
+            preg_match_all('/@depends ([^ ]*) *$/m', (string) $dependAnnotation->getText(), $matches);
 
-
-            $dependsArgument = array_map(function ($testName) {
-                return new Arg(new String_($this->methodNameToDescription($testName)));
-            }, $matches[1]);
+            $dependsArgument = array_map(fn ($testName): \PhpParser\Node\Arg => new Arg(new String_($this->methodNameToDescription($testName))), $matches[1]);
         }
 
         return $dependsArgument;

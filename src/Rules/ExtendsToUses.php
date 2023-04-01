@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -18,20 +18,25 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class ExtendsToUses extends NodeVisitorAbstract
 {
-    private array $excludedTestCase = [
+    private const EXCLUDED_TEST_CASE = [
         'PHPUnit\Framework\TestCase',
         'Tests\TestCase',
     ];
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function enterNode(Node $node)
     {
-        if (! $node instanceof Class_ || $node->extends === null || in_array($node->extends->getAttribute('resolvedName')->toString(), $this->excludedTestCase)) {
+        if (! $node instanceof Class_) {
             return null;
         }
-
+        if ($node->extends === null) {
+            return null;
+        }
+        if (in_array($node->extends->getAttribute('resolvedName')->toString(), self::EXCLUDED_TEST_CASE)) {
+            return null;
+        }
         $resolvedName = $node->extends->getAttribute('resolvedName');
         $resolvedName->setAttributes([]);
 

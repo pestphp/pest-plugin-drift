@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Parser\PrettyPrinter;
+namespace Pest\Pestify\Parser\PrettyPrinter;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
@@ -12,7 +12,7 @@ use PhpParser\PrettyPrinter\Standard as BaseStandard;
 final class Standard extends BaseStandard
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function p(Node $node, $parentFormatPreserved = false): string
     {
@@ -29,8 +29,10 @@ final class Standard extends BaseStandard
 
         $startPos = $origNode->getStartTokenPos();
         $endPos = $origNode->getEndTokenPos();
-
-        if ($startPos < 0 || $endPos < 0) {
+        if ($startPos < 0) {
+            return $this->pFallback($node);
+        }
+        if ($endPos < 0) {
             return $this->pFallback($node);
         }
 
@@ -40,7 +42,7 @@ final class Standard extends BaseStandard
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function pStmt_Expression(Expression $node)
     {
@@ -50,7 +52,7 @@ final class Standard extends BaseStandard
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function pStmt_Function(Function_ $node)
     {

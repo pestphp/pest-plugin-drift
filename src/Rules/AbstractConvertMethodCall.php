@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,7 +11,7 @@ use PhpParser\NodeVisitorAbstract;
 abstract class AbstractConvertMethodCall extends NodeVisitorAbstract
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     final public function enterNode(Node $node)
     {
@@ -21,7 +21,7 @@ abstract class AbstractConvertMethodCall extends NodeVisitorAbstract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     final public function leaveNode(Node $node)
     {

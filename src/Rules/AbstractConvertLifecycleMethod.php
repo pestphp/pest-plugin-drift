@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -23,12 +23,10 @@ abstract class AbstractConvertLifecycleMethod extends AbstractConvertClassMethod
     protected function apply(ClassMethod $classMethod): int|Node|array|null
     {
         // Remove parent lifecyle call.
-        $stmts = array_filter($classMethod->stmts ?? [], function (Stmt $stmt) {
-            return ! ($stmt instanceof Expression &&
-                $stmt->expr instanceof StaticCall &&
-                $stmt->expr->name instanceof Identifier &&
-                $stmt->expr->name->toString() === $this->lifecycleMethodName());
-        });
+        $stmts = array_filter($classMethod->stmts ?? [], fn (Stmt $stmt): bool => ! ($stmt instanceof Expression &&
+            $stmt->expr instanceof StaticCall &&
+            $stmt->expr->name instanceof Identifier &&
+            $stmt->expr->name->toString() === $this->lifecycleMethodName()));
 
         // Build Pest lifecycle Method.
         return new Expression(new FuncCall(

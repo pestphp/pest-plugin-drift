@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Parser\NodeFinder;
+namespace Pest\Pestify\Parser\NodeFinder;
 
-use PestConverter\Analyzer\ClassMethodAnalyzerInterface;
+use Pest\Pestify\Analyzer\ClassMethodAnalyzerInterface;
 use PhpParser\Node\Stmt\ClassMethod;
 
 final class NonTestMethodFinder implements NonTestMethodFinderInterface
 {
     public function __construct(
-        private ClassMethodFinderInterface $classMethodFinder,
-        private ClassMethodAnalyzerInterface $classMethodAnalyzer,
+        private readonly ClassMethodFinderInterface $classMethodFinder,
+        private readonly ClassMethodAnalyzerInterface $classMethodAnalyzer,
     ) {
     }
 
@@ -19,8 +19,6 @@ final class NonTestMethodFinder implements NonTestMethodFinderInterface
     {
         $classMethods = $this->classMethodFinder->find($nodes);
 
-        return array_filter($classMethods, function (ClassMethod $classMethod) {
-            return ! $this->classMethodAnalyzer->isLifecycleMethod($classMethod) && ! $this->classMethodAnalyzer->isTestMethod($classMethod);
-        });
+        return array_filter($classMethods, fn (ClassMethod $classMethod): bool => ! $this->classMethodAnalyzer->isLifecycleMethod($classMethod) && ! $this->classMethodAnalyzer->isTestMethod($classMethod));
     }
 }

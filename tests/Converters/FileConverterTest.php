@@ -1,8 +1,8 @@
 <?php
 
-use PestConverter\Converters\CodeConverterFactory;
-use PestConverter\Converters\FileConverter;
-use PestConverter\Finder\File;
+use Pest\Pestify\Converters\CodeConverterFactory;
+use Pest\Pestify\Converters\FileConverter;
+use Pest\Pestify\Finder\File;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('create converted file', function () {
@@ -18,5 +18,5 @@ it('create converted file', function () {
 
     (new FileConverter($codeConverter, tmpDir('results')))->convert($file);
 
-    expect(file_exists(tmpDir('results') . '/FooTest.php'))->toBeTrue();
+    expect(file_exists(tmpDir('results').'/FooTest.php'))->toBeTrue();
 });

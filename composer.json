@@ -1,53 +1,60 @@
 {
-    "name": "mandisma/pest-converter",
+    "name": "pestphp/pestify",
+    "description": "The Pestify Project",
+    "keywords": [
+        "php",
+        "framework",
+        "pest",
+        "unit",
+        "test",
+        "testing",
+        "pestify"
+    ],
     "license": "MIT",
-    "description": "PHPUnit to Pest Converter",
+    "require": {
+        "php": "^8.1.0",
+        "nikic/php-parser": "^4.15.4",
+        "symfony/console": "^6.2.8",
+        "symfony/finder": "^6.2.7"
+    },
     "autoload": {
         "psr-4": {
-            "PestConverter\\": "src/"
+            "Pest\\Pestify\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PestConverter\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
-    },
-    "authors": [
-        {
-            "name": "mandisma",
-            "email": "mandis68@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^8.0",
-        "nikic/php-parser": "^4.13",
-        "symfony/console": "^5.3.3",
-        "symfony/finder": "^5.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.1",
-        "vimeo/psalm": "^5.1",
-        "pestphp/pest": "^1.20",
-        "composer/composer": "dev-main",
-        "bamarni/composer-bin-plugin": "^1.7"
+        "pestphp/pest": "^2.3",
+        "pestphp/pest-dev-tools": "^2.6.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "bin": [
-        "bin/pest-converter"
+        "bin/pestify"
     ],
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "bamarni/composer-bin-plugin": true
-        }
-    },
     "scripts": {
-        "bin": "echo 'bin not installed'",
-        "post-install-cmd": ["@composer bin all install --ansi"],
-        "post-update-cmd": ["@composer bin all update --ansi"]
-    },
-    "extra": {
-        "bamarni-bin": {
-            "bin-links": false
-        }
+        "refacto": "rector",
+        "lint": "pint",
+        "test:refacto": "rector --dry-run",
+        "test:lint": "pint --test",
+        "test:types": "phpstan analyse --ansi",
+        "test:unit": "pest --colors=always",
+        "test": [
+            "@test:refacto",
+            "@test:lint",
+            "@test:types",
+            "@test:unit"
+        ]
     }
 }

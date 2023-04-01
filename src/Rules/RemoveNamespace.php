@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
@@ -14,7 +14,7 @@ use PhpParser\NodeVisitorAbstract;
 final class RemoveNamespace extends NodeVisitorAbstract
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function leaveNode(Node $node)
     {

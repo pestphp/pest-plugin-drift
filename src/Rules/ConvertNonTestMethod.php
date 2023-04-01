@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -23,7 +23,11 @@ final class ConvertNonTestMethod extends AbstractConvertClassMethod
      */
     protected function filter(ClassMethod $classMethod): bool
     {
-        return ! $this->classMethodAnalyzer->isTestMethod($classMethod) && ! $this->classMethodAnalyzer->isLifecycleMethod($classMethod);
+        if ($this->classMethodAnalyzer->isTestMethod($classMethod)) {
+            return false;
+        }
+
+        return ! $this->classMethodAnalyzer->isLifecycleMethod($classMethod);
     }
 
     /**

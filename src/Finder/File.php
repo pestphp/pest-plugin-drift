@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Finder;
+namespace Pest\Pestify\Finder;
 
 use Symfony\Component\Finder\SplFileInfo;
 
 final class File implements FileInterface
 {
-    private SplFileInfo $splFileInfo;
-
-    public function __construct(SplFileInfo $splFileInfo)
+    public function __construct(private readonly SplFileInfo $splFileInfo)
     {
-        $this->splFileInfo = $splFileInfo;
     }
 
     public function getBasename(string $suffix = ''): string

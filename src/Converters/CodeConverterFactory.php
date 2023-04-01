@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Converters;
+namespace Pest\Pestify\Converters;
 
-use PestConverter\Parser\PrettyPrinter\Standard;
+use Pest\Pestify\Parser\PrettyPrinter\Standard;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
@@ -19,7 +19,7 @@ final class CodeConverterFactory
      */
     public function codeConverter(): CodeConverter
     {
-        $visitors = require __DIR__ . '/../../config/rules.php';
+        $visitors = require __DIR__.'/../../config/rules.php';
 
         $lexer = new Emulative([
             'usedAttributes' => [

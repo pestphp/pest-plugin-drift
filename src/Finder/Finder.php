@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Finder;
+namespace Pest\Pestify\Finder;
 
 use Symfony\Component\Finder\Finder as BaseFinder;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class Finder implements FinderInterface
 {
-    private BaseFinder $baseFinder;
+    private readonly BaseFinder $baseFinder;
 
     public function __construct(string|array $in, string|array $not = [])
     {
@@ -24,13 +24,11 @@ final class Finder implements FinderInterface
     /**
      * Return files in selected directories.
      *
-     * @return array<\PestConverter\Finder\File>
+     * @return array<\Pest\Pestify\Finder\File>
      */
     public function get(): array
     {
-        return array_map(static function (SplFileInfo $splFileInfo) {
-            return new File($splFileInfo);
-        }, iterator_to_array($this->baseFinder));
+        return array_map(static fn (SplFileInfo $splFileInfo): \Pest\Pestify\Finder\File => new File($splFileInfo), iterator_to_array($this->baseFinder));
     }
 
     public function count(): int

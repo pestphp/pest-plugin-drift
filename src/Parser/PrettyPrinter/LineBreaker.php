@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Parser\PrettyPrinter;
+namespace Pest\Pestify\Parser\PrettyPrinter;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;

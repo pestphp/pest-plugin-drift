@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Converters;
+namespace Pest\Pestify\Converters;
 
-use PestConverter\Finder\FinderInterface;
+use Pest\Pestify\Finder\FinderInterface;
 
 final class DirectoryConverter
 {
-    private FileConverter $fileConverter;
-
-    public function __construct(FileConverter $fileConverter)
+    public function __construct(private readonly FileConverter $fileConverter)
     {
-        $this->fileConverter = $fileConverter;
     }
 
     /**

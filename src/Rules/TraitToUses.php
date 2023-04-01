@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -19,7 +19,7 @@ use PhpParser\NodeVisitorAbstract;
 final class TraitToUses extends NodeVisitorAbstract
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function leaveNode(Node $node)
     {
@@ -27,15 +27,13 @@ final class TraitToUses extends NodeVisitorAbstract
             return null;
         }
 
-        return array_map(static function (Name $trait) {
-            return new Expression(
-                new FuncCall(
-                    new Name('uses'),
-                    [
-                        new Arg(new ClassConstFetch($trait->getAttribute('resolvedName'), 'class')),
-                    ]
-                )
-            );
-        }, $node->traits);
+        return array_map(static fn (Name $trait): \PhpParser\Node\Stmt\Expression => new Expression(
+            new FuncCall(
+                new Name('uses'),
+                [
+                    new Arg(new ClassConstFetch($trait->getAttribute('resolvedName'), 'class')),
+                ]
+            )
+        ), $node->traits);
     }
 }

@@ -2,36 +2,38 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Parser\NodeFinder;
+namespace Pest\Pestify\Parser\NodeFinder;
 
 use PhpParser\Node\Stmt\UseUse;
 
 final class MissingUseFinder implements MissingUseFinderInterface
 {
     public function __construct(
-        private UseFinder $useFinder,
-        private NameFinder $nameFinder,
+        private readonly UseFinder $useFinder,
+        private readonly NameFinder $nameFinder,
     ) {
     }
 
     public function find(array $nodes): array
     {
-        $uses = array_map(function (UseUse $useUse) {
-            return $useUse->name->toString();
-        }, $this->useFinder->find($nodes));
+        $uses = array_map(fn (UseUse $useUse): string => $useUse->name->toString(), $this->useFinder->find($nodes));
 
         $names = $this->nameFinder->find($nodes);
 
         $namesWithMissingUse = [];
 
         foreach ($names as $name) {
-            if (! $name->hasAttribute('resolvedName') || $name->isFullyQualified()) {
+            if (! $name->hasAttribute('resolvedName')) {
                 continue;
             }
-
+            if ($name->isFullyQualified()) {
+                continue;
+            }
             $resolvedName = $name->getAttribute('resolvedName');
-
-            if (in_array($resolvedName->toString(), $uses) || count($resolvedName->parts) === 1) {
+            if (in_array($resolvedName->toString(), $uses)) {
+                continue;
+            }
+            if ((is_countable($resolvedName->parts) ? count($resolvedName->parts) : 0) === 1) {
                 continue;
             }
 

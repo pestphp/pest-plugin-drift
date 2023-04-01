@@ -1,6 +1,6 @@
 <?php
 
-use PestConverter\Converters\CodeConverterFactory;
+use Pest\Pestify\Converters\CodeConverterFactory;
 
 function codeConverter()
 {
@@ -20,7 +20,7 @@ it('remove class', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->not->toContain("class FooTest");
+    expect($convertedCode)->not->toContain('class FooTest');
 });
 
 it('remove unnecessary use', function () {
@@ -39,7 +39,7 @@ it('remove unnecessary use', function () {
 
 it('convert extends class to uses method', function () {
     $code = '<?php
-        use PestConverter\Tests\Fixtures\FixtureTestCase;
+        use Pest\Pestify\Tests\Fixtures\FixtureTestCase;
 
         class MyTest extends FixtureTestCase {}
     ';
@@ -47,8 +47,8 @@ it('convert extends class to uses method', function () {
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)
-        ->not->toContain('use PestConverter\Tests\Fixtures\FixtureTestCase;')
-        ->toContain("uses(\PestConverter\Tests\Fixtures\FixtureTestCase::class);");
+        ->not->toContain('use Pest\Pestify\Tests\Fixtures\FixtureTestCase;')
+        ->toContain("uses(\Pest\Pestify\Tests\Fixtures\FixtureTestCase::class);");
 });
 
 it('doesnt convert extends PhpUnit TestCase', function () {
@@ -61,7 +61,7 @@ it('doesnt convert extends PhpUnit TestCase', function () {
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)->not->toContain("uses(\PHPUnit\Framework\TestCase::class);");
-    expect($convertedCode)->not->toContain("uses(TestCase::class);");
+    expect($convertedCode)->not->toContain('uses(TestCase::class);');
 });
 
 it('convert phpunit class method to pest function call', function () {
@@ -105,14 +105,14 @@ it('convert lifecyle method', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain("beforeEach");
-    expect($convertedCode)->toContain("beforeAll");
-    expect($convertedCode)->toContain("afterEach");
-    expect($convertedCode)->toContain("afterAll");
-    expect($convertedCode)->not->toContain("setUp");
-    expect($convertedCode)->not->toContain("setUpBeforeClass");
-    expect($convertedCode)->not->toContain("tearDown");
-    expect($convertedCode)->not->toContain("tearDownAfterClass");
+    expect($convertedCode)->toContain('beforeEach');
+    expect($convertedCode)->toContain('beforeAll');
+    expect($convertedCode)->toContain('afterEach');
+    expect($convertedCode)->toContain('afterAll');
+    expect($convertedCode)->not->toContain('setUp');
+    expect($convertedCode)->not->toContain('setUpBeforeClass');
+    expect($convertedCode)->not->toContain('tearDown');
+    expect($convertedCode)->not->toContain('tearDownAfterClass');
 });
 
 it('convert non test method', function () {
@@ -166,9 +166,9 @@ it('keep using traits', function () {
 
 it('add missing use', function () {
     $code = '<?php
-        namespace PestConverter\Tests;
+        namespace Pest\Pestify\Tests;
 
-        use PestConverter\Tests\Helper\Foo;
+        use Pest\Pestify\Tests\Helper\Foo;
 
         class MyTest {
             public function test_foo()
@@ -182,7 +182,7 @@ it('add missing use', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('use \PestConverter\Tests\Bar;');
+    expect($convertedCode)->toContain('use \Pest\Pestify\Tests\Bar;');
 });
 
 it('keep multiline statements', function () {
@@ -270,7 +270,7 @@ it('convert assertEquals to Pest expectation', function () {
 
 it('convert assertInstanceOf to Pest expectation', function () {
     $code = '<?php
-        use PestConverter\Tests\Fixtures\Some\Thing;
+        use Pest\Pestify\Tests\Fixtures\Some\Thing;
         class MyTest {
             public function test_instanceof()
             {
@@ -282,7 +282,7 @@ it('convert assertInstanceOf to Pest expectation', function () {
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)
-        ->toContain('use PestConverter\Tests\Fixtures\Some\Thing;')
+        ->toContain('use Pest\Pestify\Tests\Fixtures\Some\Thing;')
         ->toContain('expect($thing)->toBeInstanceOf(Thing::class)');
 });
 
@@ -358,7 +358,7 @@ it('convert assertEmpty to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain("expect([])->toBeEmpty()");
+    expect($convertedCode)->toContain('expect([])->toBeEmpty()');
 });
 
 it('convert assertNotEmpty to Pest expectation', function () {
@@ -373,7 +373,7 @@ it('convert assertNotEmpty to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain("expect([])->not->toBeEmpty()");
+    expect($convertedCode)->toContain('expect([])->not->toBeEmpty()');
 });
 
 it('convert assertContains to Pest expectation', function () {
@@ -388,7 +388,7 @@ it('convert assertContains to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain("expect([])->toContain(1)");
+    expect($convertedCode)->toContain('expect([])->toContain(1)');
 });
 
 it('convert assertNotContains to Pest expectation', function () {
@@ -403,7 +403,7 @@ it('convert assertNotContains to Pest expectation', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain("expect([])->not->toContain(1)");
+    expect($convertedCode)->toContain('expect([])->not->toContain(1)');
 });
 
 it('convert assertSame to Pest expectation', function () {

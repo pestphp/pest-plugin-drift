@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Console;
+namespace Pest\Pestify\Console;
 
-use PestConverter\Converters\CodeConverterFactory;
-use PestConverter\Converters\DirectoryConverter;
-use PestConverter\Converters\FileConverter;
-use PestConverter\Finder\Finder;
+use Pest\Pestify\Converters\CodeConverterFactory;
+use Pest\Pestify\Converters\DirectoryConverter;
+use Pest\Pestify\Converters\FileConverter;
+use Pest\Pestify\Finder\Finder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

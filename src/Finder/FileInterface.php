@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Finder;
+namespace Pest\Pestify\Finder;
 
 interface FileInterface
 {

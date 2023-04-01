@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
@@ -26,7 +26,7 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function leaveNode(Node $node)
     {
@@ -35,12 +35,10 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
         }
 
         // Filter use to remove.
-        $node->uses = array_filter($node->uses, function (UseUse $use) {
-            return ! in_array($use->name->getLast(), $this->useToRemove) && $use->name->isQualified();
-        });
+        $node->uses = array_filter($node->uses, fn (UseUse $use): bool => ! in_array($use->name->getLast(), $this->useToRemove) && $use->name->isQualified());
 
         // Remove unnecessary use.
-        if (count($node->uses) === 0) {
+        if ($node->uses === []) {
             return NodeTraverser::REMOVE_NODE;
         }
 

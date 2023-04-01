@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PestConverter\Rules;
+namespace Pest\Pestify\Rules;
 
-use PestConverter\Analyzer\ClassMethodAnalyzer;
+use Pest\Pestify\Analyzer\ClassMethodAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
@@ -17,21 +17,27 @@ abstract class AbstractConvertClassMethod extends NodeVisitorAbstract
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     final public function enterNode(Node $node)
     {
-        if (! $node instanceof ClassMethod || ! $this->filter($node)) {
+        if (! $node instanceof ClassMethod) {
+            return null;
+        }
+        if (! $this->filter($node)) {
             return null;
         }
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     final public function leaveNode(Node $node)
     {
-        if (! $node instanceof ClassMethod || ! $this->filter($node)) {
+        if (! $node instanceof ClassMethod) {
+            return null;
+        }
+        if (! $this->filter($node)) {
             return null;
         }
 
