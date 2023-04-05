@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Add missing uses.
+ * @internal
  */
 final class AddMissingUse extends NodeVisitorAbstract
 {

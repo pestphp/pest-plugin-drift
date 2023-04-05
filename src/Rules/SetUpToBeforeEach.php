@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Pest\Pestify\Rules;
 
 /**
- * Replace setUp method with beforeEach call.
+ * @internal
  */
 final class SetUpToBeforeEach extends AbstractConvertLifecycleMethod
 {

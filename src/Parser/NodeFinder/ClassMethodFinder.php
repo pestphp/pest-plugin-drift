@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Pest\Pestify\Parser\NodeFinder;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeFinder;
 
+/**
+ * @internal
+ */
 final class ClassMethodFinder extends AbstractNodeFinder implements ClassMethodFinderInterface
 {
-    public $nodeFinder;
+    public NodeFinder $nodeFinder;
 
     /**
      * Extract names from nodes.

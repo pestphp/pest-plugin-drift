@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 
 /**
- * Convert PHPUnit assertions to Pest Expectations.
+ * @internal
  */
 abstract class AbstractConvertLifecycleMethod extends AbstractConvertClassMethod
 {

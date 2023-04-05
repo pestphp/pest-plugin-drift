@@ -9,6 +9,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\PrettyPrinter\Standard as BaseStandard;
 
+/**
+ * @internal
+ */
 final class Standard extends BaseStandard
 {
     /**

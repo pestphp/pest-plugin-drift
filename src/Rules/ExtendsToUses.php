@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Replace extends with uses pest fonction.
+ * @internal
  */
 final class ExtendsToUses extends NodeVisitorAbstract
 {
@@ -31,13 +31,17 @@ final class ExtendsToUses extends NodeVisitorAbstract
         if (! $node instanceof Class_) {
             return null;
         }
-        if ($node->extends === null) {
+        if (! $node->extends instanceof Name) {
             return null;
         }
-        if (in_array($node->extends->getAttribute('resolvedName')->toString(), self::EXCLUDED_TEST_CASE)) {
-            return null;
-        }
+
+        /** @var Name $resolvedName */
         $resolvedName = $node->extends->getAttribute('resolvedName');
+
+        if (in_array($resolvedName->toString(), self::EXCLUDED_TEST_CASE, true)) {
+            return null;
+        }
+
         $resolvedName->setAttributes([]);
 
         $usesStmt = new Expression(

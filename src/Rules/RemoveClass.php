@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Extract the content of the class and remove it.
+ * @internal
  */
 final class RemoveClass extends NodeVisitorAbstract
 {

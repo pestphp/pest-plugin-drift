@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\NodeFinder;
 
 /**
- * Remove unnecessary traits use from test class.
+ * @internal
  */
 final class RemoveTraitsUse extends AbstractRemoveUse
 {
@@ -19,6 +19,7 @@ final class RemoveTraitsUse extends AbstractRemoveUse
     {
         $nodeFinder = new NodeFinder();
 
+        /** @var array<int, TraitUse> $traitsUse */
         $traitsUse = $nodeFinder->findInstanceOf($nodes, TraitUse::class);
 
         $toRemove = [];

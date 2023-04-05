@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Pest\Pestify\Parser\NodeFinder;
 
+/**
+ * @internal
+ */
 interface NameFinderInterface
 {
     /**

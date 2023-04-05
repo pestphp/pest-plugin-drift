@@ -7,6 +7,9 @@ namespace Pest\Pestify\Analyzer;
 use PhpParser\Comment;
 use PhpParser\Node\Stmt\ClassMethod;
 
+/**
+ * @internal
+ */
 final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
 {
     /**

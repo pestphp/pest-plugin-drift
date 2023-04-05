@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Pest\Pestify\Parser\NodeFinder;
 
 use PhpParser\Node\Name;
+use PhpParser\NodeFinder;
 
+/**
+ * @internal
+ */
 final class NameFinder extends AbstractNodeFinder implements NameFinderInterface
 {
-    public $nodeFinder;
+    public NodeFinder $nodeFinder;
 
     /**
      * Extract names from nodes.

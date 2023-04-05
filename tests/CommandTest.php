@@ -5,6 +5,7 @@ use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 it('execute successfully', function () {
+
     $convertCommand = new ConvertCommand();
     $commandTester = new CommandTester($convertCommand);
 

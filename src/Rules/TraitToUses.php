@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Replace extends with uses pest fonction.
+ * @internal
  */
 final class TraitToUses extends NodeVisitorAbstract
 {
@@ -27,11 +27,11 @@ final class TraitToUses extends NodeVisitorAbstract
             return null;
         }
 
-        return array_map(static fn (Name $trait): \PhpParser\Node\Stmt\Expression => new Expression(
+        return array_map(static fn (Name $trait): Expression => new Expression(
             new FuncCall(
                 new Name('uses'),
                 [
-                    new Arg(new ClassConstFetch($trait->getAttribute('resolvedName'), 'class')),
+                    new Arg(new ClassConstFetch($trait->getAttribute('resolvedName'), 'class')), // @phpstan-ignore-line
                 ]
             )
         ), $node->traits);

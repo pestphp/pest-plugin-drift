@@ -6,6 +6,9 @@ namespace Pest\Pestify\Analyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 
+/**
+ * @internal
+ */
 interface ClassMethodAnalyzerInterface
 {
     /**

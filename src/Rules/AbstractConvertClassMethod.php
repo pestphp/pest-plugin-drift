@@ -9,6 +9,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
+/**
+ * @internal
+ */
 abstract class AbstractConvertClassMethod extends NodeVisitorAbstract
 {
     public function __construct(

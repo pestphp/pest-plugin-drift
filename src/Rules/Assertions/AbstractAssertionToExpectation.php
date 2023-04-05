@@ -14,6 +14,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\VariadicPlaceholder;
 
+/**
+ * @internal
+ */
 abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
 {
     public function __construct(

@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
 
 /**
- * Remove unnecessary extends use from test class.
+ * @internal
  */
 final class RemoveExtendsUse extends AbstractRemoveUse
 {
@@ -19,12 +19,13 @@ final class RemoveExtendsUse extends AbstractRemoveUse
     {
         $nodeFinder = new NodeFinder();
 
+        /** @var array<int, Class_> $classesWithExtends */
         $classesWithExtends = $nodeFinder->findInstanceOf($nodes, Class_::class);
 
         $toRemove = [];
 
         foreach ($classesWithExtends as $classWithExtends) {
-            if ($classWithExtends->extends === null) {
+            if (!$classWithExtends->extends instanceof \PhpParser\Node\Name) {
                 continue;
             }
             $toRemove[] = $classWithExtends->extends->toString();

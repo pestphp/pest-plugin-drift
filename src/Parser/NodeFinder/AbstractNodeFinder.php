@@ -6,6 +6,9 @@ namespace Pest\Pestify\Parser\NodeFinder;
 
 use PhpParser\NodeFinder;
 
+/**
+ * @internal
+ */
 abstract class AbstractNodeFinder
 {
     public function __construct(

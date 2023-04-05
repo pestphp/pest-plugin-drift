@@ -8,6 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeVisitorAbstract;
 
+/**
+ * @internal
+ */
 abstract class AbstractConvertMethodCall extends NodeVisitorAbstract
 {
     /**

@@ -12,6 +12,9 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PhpParser\Parser\Php7;
 
+/**
+ * @internal
+ */
 final class CodeConverterFactory
 {
     /**

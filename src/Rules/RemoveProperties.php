@@ -10,17 +10,19 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Remove unnecessary properties.
+ * @internal
  */
 final class RemoveProperties extends NodeVisitorAbstract
 {
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): int|null
     {
         if ($node instanceof Property) {
             return NodeTraverser::REMOVE_NODE;
         }
+
+        return null;
     }
 }

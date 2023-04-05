@@ -28,7 +28,7 @@
         }
     },
     "require-dev": {
-        "pestphp/pest": "^2.3",
+        "pestphp/pest": "^2.4",
         "pestphp/pest-dev-tools": "^2.6.0"
     },
     "minimum-stability": "stable",

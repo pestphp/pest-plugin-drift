@@ -7,6 +7,9 @@ namespace Pest\Pestify\Finder;
 use Symfony\Component\Finder\Finder as BaseFinder;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @internal
+ */
 final class Finder implements FinderInterface
 {
     private readonly BaseFinder $baseFinder;

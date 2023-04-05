@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 
 /**
- * Replace non test class method with function.
+ * @internal
  */
 final class ConvertNonTestMethod extends AbstractConvertClassMethod
 {

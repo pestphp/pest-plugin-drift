@@ -6,6 +6,9 @@ namespace Pest\Pestify\Finder;
 
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @internal
+ */
 final class File implements FileInterface
 {
     public function __construct(private readonly SplFileInfo $splFileInfo)

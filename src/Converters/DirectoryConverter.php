@@ -6,6 +6,9 @@ namespace Pest\Pestify\Converters;
 
 use Pest\Pestify\Finder\FinderInterface;
 
+/**
+ * @internal
+ */
 final class DirectoryConverter
 {
     public function __construct(private readonly FileConverter $fileConverter)

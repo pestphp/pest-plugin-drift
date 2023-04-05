@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Pest\Pestify\Parser\NodeFinder;
 
 use PhpParser\Node\Stmt\UseUse;
+use PhpParser\NodeFinder;
 
+/**
+ * @internal
+ */
 final class UseFinder extends AbstractNodeFinder implements UseFinderInterface
 {
-    public $nodeFinder;
+    public NodeFinder $nodeFinder;
 
     /**
      * Extract uses from nodes.

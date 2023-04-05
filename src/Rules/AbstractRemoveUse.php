@@ -11,7 +11,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Remove unnecessary use from test class.
+ * @internal
  */
 abstract class AbstractRemoveUse extends NodeVisitorAbstract
 {
@@ -48,7 +48,8 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
     /**
      * Get use to remove.
      *
-     * @return array<string>
+     * @param  array<int, Node> $nodes
+     * @return array<int, string>
      */
     abstract protected function useToRemove(array $nodes): array;
 }

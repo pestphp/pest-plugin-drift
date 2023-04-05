@@ -7,6 +7,9 @@ namespace Pest\Pestify\Parser\NodeFinder;
 use Pest\Pestify\Analyzer\ClassMethodAnalyzerInterface;
 use PhpParser\Node\Stmt\ClassMethod;
 
+/**
+ * @internal
+ */
 final class NonTestMethodFinder implements NonTestMethodFinderInterface
 {
     public function __construct(

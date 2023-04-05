@@ -8,6 +8,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 
+/**
+ * @internal
+ */
 final class AssertionToNegativeExpectation extends AbstractAssertionToExpectation
 {
     protected function buildExpect(MethodCall $methodCall): Expr

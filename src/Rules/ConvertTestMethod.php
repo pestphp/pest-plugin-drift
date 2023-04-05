@@ -16,10 +16,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 
 /**
- * Replace test class method with it or test function call.
+ * @internal
  */
 final class ConvertTestMethod extends AbstractConvertClassMethod
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function apply(ClassMethod $classMethod): int|Node|array|null
     {
         $methodName = $classMethod->name->toString();
@@ -64,14 +67,17 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
 
     /**
      * Remove unnecessary annotations and clean empty comments
+     *
+     * @param array<int, Comment> $comments
+     * @return array<int, Comment>
      */
     private function cleanComments(array $comments): array
     {
         // Remove unnecessary comments.
         $comments = array_map(static function (Comment $comment): Comment {
             $text = $comment->getText();
-            $text = preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
-            $text = preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
+            $text = (string) preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
+            $text = (string) preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
 
             return new Comment($text, $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
         }, $comments);
@@ -84,6 +90,9 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
 
     /**
      * Search @depends annotations in comments and build depends argument with them.
+     *
+     * @param array<int, Comment> $comments
+     * @return array<int, Arg>
      */
     private function extractDependsArgument(array $comments): array
     {
@@ -92,7 +101,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
         $dependAnnotations = array_filter($comments, static fn (Comment $comment): bool => str_contains($comment->getText(), '@depends'));
 
         foreach ($dependAnnotations as $dependAnnotation) {
-            preg_match_all('/@depends ([^ ]*) *$/m', (string) $dependAnnotation->getText(), $matches);
+            preg_match_all('/@depends ([^ ]*) *$/m', $dependAnnotation->getText(), $matches);
 
             $dependsArgument = array_map(fn ($testName): \PhpParser\Node\Arg => new Arg(new String_($this->methodNameToDescription($testName))), $matches[1]);
         }
@@ -105,7 +114,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
      */
     private function methodNameToDescription(string $name): string
     {
-        $newName = preg_replace(
+        $newName = (string) preg_replace(
             ['/^(test|it)/', '/_/', '/(?=[A-Z])/'],
             ['', ' ', ' '],
             $name

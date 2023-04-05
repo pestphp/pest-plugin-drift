@@ -6,12 +6,16 @@ namespace Pest\Pestify\Parser\NodeFinder;
 
 use PhpParser\Node\Stmt\UseUse;
 
+/**
+ * @internal
+ */
 final class MissingUseFinder implements MissingUseFinderInterface
 {
     public function __construct(
         private readonly UseFinder $useFinder,
         private readonly NameFinder $nameFinder,
     ) {
+
     }
 
     public function find(array $nodes): array
@@ -23,6 +27,7 @@ final class MissingUseFinder implements MissingUseFinderInterface
         $namesWithMissingUse = [];
 
         foreach ($names as $name) {
+
             if (! $name->hasAttribute('resolvedName')) {
                 continue;
             }

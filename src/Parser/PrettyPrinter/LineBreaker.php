@@ -7,6 +7,9 @@ namespace Pest\Pestify\Parser\PrettyPrinter;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 
+/**
+ * @internal
+ */
 final class LineBreaker
 {
     /**

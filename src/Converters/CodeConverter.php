@@ -9,6 +9,9 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PhpParser\PrettyPrinterAbstract;
 
+/**
+ * @internal
+ */
 final class CodeConverter
 {
     public function __construct(private readonly Parser $parser, private readonly NodeTraverserInterface $traverser, private readonly PrettyPrinterAbstract $prettyPrinter, private readonly Emulative $lexer)

@@ -105,14 +105,14 @@ it('convert lifecyle method', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('beforeEach');
-    expect($convertedCode)->toContain('beforeAll');
-    expect($convertedCode)->toContain('afterEach');
-    expect($convertedCode)->toContain('afterAll');
-    expect($convertedCode)->not->toContain('setUp');
-    expect($convertedCode)->not->toContain('setUpBeforeClass');
-    expect($convertedCode)->not->toContain('tearDown');
-    expect($convertedCode)->not->toContain('tearDownAfterClass');
+    expect($convertedCode)->toContain('beforeEach')
+        ->and($convertedCode)->toContain('beforeAll')
+        ->and($convertedCode)->toContain('afterEach')
+        ->and($convertedCode)->toContain('afterAll')
+        ->and($convertedCode)->not->toContain('setUp')
+        ->and($convertedCode)->not->toContain('setUpBeforeClass')
+        ->and($convertedCode)->not->toContain('tearDown')
+        ->and($convertedCode)->not->toContain('tearDownAfterClass');
 });
 
 it('convert non test method', function () {
