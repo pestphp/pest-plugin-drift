@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Pestify\Converters;
 
+use Exception;
 use Pest\Pestify\Finder\FileInterface;
 
 /**
@@ -11,12 +12,18 @@ use Pest\Pestify\Finder\FileInterface;
  */
 final class FileConverter
 {
+    /**
+     * Creates a new file converter instance.
+     */
     public function __construct(private readonly CodeConverter $codeConverter, private readonly string $outputDir)
     {
+        //
     }
 
     /**
      * Convert the content of the file.
+     *
+     * @throws Exception
      */
     public function convert(FileInterface $file): void
     {

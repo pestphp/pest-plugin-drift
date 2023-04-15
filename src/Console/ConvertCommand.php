@@ -20,6 +20,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 final class ConvertCommand extends Command
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function configure(): void
     {
         $this->setName('convert');
@@ -28,6 +31,9 @@ final class ConvertCommand extends Command
         $this->addOption('output', 'd', InputOption::VALUE_REQUIRED);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $symfonyStyle = new SymfonyStyle($input, $output);

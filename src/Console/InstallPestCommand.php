@@ -16,12 +16,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class InstallPestCommand extends Command
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function configure(): void
     {
         $this->setName('init');
         $this->addOption('laravel', null, InputOption::VALUE_NONE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         ini_set('memory_limit', '512M');

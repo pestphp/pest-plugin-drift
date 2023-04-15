@@ -5,6 +5,7 @@
         "KevinGH\\Box\\Compactor\\Json",
         "KevinGH\\Box\\Compactor\\Php"
     ],
+    "exclude-dev-files": false,
     "files": [
         "config/rules.php"
     ]

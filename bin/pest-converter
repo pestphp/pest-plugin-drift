@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-(function () {
+use Pest\Pestify\Console\ConvertCommand;
+use Pest\Pestify\Console\InstallPestCommand;
+use Symfony\Component\Console\Application;
+
+(static function () {
     $possibleFiles = [__DIR__.'/../../../autoload.php', __DIR__.'/../../autoload.php', __DIR__.'/../vendor/autoload.php'];
     $file = null;
     foreach ($possibleFiles as $possibleFile) {
@@ -19,11 +23,11 @@
     require_once $file;
 })();
 
-$application = new \Symfony\Component\Console\Application('Pest\Pestify', 'dev-main');
+$application = new Application('Pest\Pestify', 'dev-main');
 
 $application->addCommands([
-    new \Pest\Pestify\Console\ConvertCommand(),
-    new \Pest\Pestify\Console\InstallPestCommand(),
+    new ConvertCommand(),
+    new InstallPestCommand(),
 ]);
 
 exit($application->run());

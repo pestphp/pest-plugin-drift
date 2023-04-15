@@ -11,13 +11,19 @@ use PhpParser\Node\Stmt\UseUse;
  */
 final class MissingUseFinder implements MissingUseFinderInterface
 {
+    /**
+     * Creates a new missing use finder instance.
+     */
     public function __construct(
         private readonly UseFinder $useFinder,
         private readonly NameFinder $nameFinder,
     ) {
-
+        //
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function find(array $nodes): array
     {
         $uses = array_map(fn (UseUse $useUse): string => $useUse->name->toString(), $this->useFinder->find($nodes));

@@ -16,11 +16,9 @@ abstract class AbstractConvertMethodCall extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    final public function enterNode(Node $node)
+    final public function enterNode(Node $node): void
     {
-        if (! $node instanceof MethodCall) {
-            return null;
-        }
+        //
     }
 
     /**
@@ -28,11 +26,9 @@ abstract class AbstractConvertMethodCall extends NodeVisitorAbstract
      */
     final public function leaveNode(Node $node)
     {
-        if (! $node instanceof MethodCall) {
-            return null;
+        if ($node instanceof MethodCall) {
+            return $this->apply($node);
         }
-
-        return $this->apply($node);
     }
 
     /**

@@ -12,7 +12,7 @@ interface FinderInterface
     /**
      * Return test files present in directory.
      *
-     * @return array<\Pest\Pestify\Finder\File>
+     * @return array<int, File>
      */
     public function get(): array;
 

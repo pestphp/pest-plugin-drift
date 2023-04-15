@@ -11,8 +11,12 @@ use PhpParser\NodeFinder;
  */
 abstract class AbstractNodeFinder
 {
+    /**
+     * Creates a new node finder instance.
+     */
     public function __construct(
         protected NodeFinder $nodeFinder,
     ) {
+        //
     }
 }

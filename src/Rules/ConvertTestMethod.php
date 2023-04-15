@@ -68,7 +68,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     /**
      * Remove unnecessary annotations and clean empty comments
      *
-     * @param array<int, Comment> $comments
+     * @param  array<int, Comment>  $comments
      * @return array<int, Comment>
      */
     private function cleanComments(array $comments): array
@@ -91,7 +91,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     /**
      * Search @depends annotations in comments and build depends argument with them.
      *
-     * @param array<int, Comment> $comments
+     * @param  array<int, Comment>  $comments
      * @return array<int, Arg>
      */
     private function extractDependsArgument(array $comments): array

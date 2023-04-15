@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Pest\Pestify\Parser\NodeFinder;
 
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+
 /**
  * @internal
  */
@@ -12,8 +15,8 @@ interface ClassMethodFinderInterface
     /**
      * Extract names from nodes.
      *
-     * @param  array<\PhpParser\Node>  $nodes
-     * @return array<\PhpParser\Node\Stmt\ClassMethod>
+     * @param  array<int, Node>  $nodes
+     * @return array<int, ClassMethod>
      */
     public function find(array $nodes): array;
 }

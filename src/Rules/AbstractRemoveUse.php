@@ -20,6 +20,9 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
      */
     private array $useToRemove = [];
 
+    /**
+     * {@inheritDoc}
+     */
     public function beforeTraverse(array $nodes): void
     {
         $this->useToRemove = $this->useToRemove($nodes);
@@ -35,7 +38,10 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
         }
 
         // Filter use to remove.
-        $node->uses = array_filter($node->uses, fn (UseUse $use): bool => ! in_array($use->name->getLast(), $this->useToRemove) && $use->name->isQualified());
+        $node->uses = array_filter(
+            $node->uses,
+            fn (UseUse $use): bool => ! in_array($use->name->getLast(), $this->useToRemove, true) && $use->name->isQualified()
+        );
 
         // Remove unnecessary use.
         if ($node->uses === []) {
@@ -48,7 +54,7 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
     /**
      * Get use to remove.
      *
-     * @param  array<int, Node> $nodes
+     * @param  array<int, Node>  $nodes
      * @return array<int, string>
      */
     abstract protected function useToRemove(array $nodes): array;

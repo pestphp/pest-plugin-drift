@@ -11,8 +11,12 @@ use Pest\Pestify\Finder\FinderInterface;
  */
 final class DirectoryConverter
 {
+    /**
+     * Creates a new directory converter instance.
+     */
     public function __construct(private readonly FileConverter $fileConverter)
     {
+        //
     }
 
     /**

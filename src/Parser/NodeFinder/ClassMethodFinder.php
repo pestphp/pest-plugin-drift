@@ -12,6 +12,9 @@ use PhpParser\NodeFinder;
  */
 final class ClassMethodFinder extends AbstractNodeFinder implements ClassMethodFinderInterface
 {
+    /**
+     * The node finder instance.
+     */
     public NodeFinder $nodeFinder;
 
     /**

@@ -25,7 +25,7 @@ final class RemoveExtendsUse extends AbstractRemoveUse
         $toRemove = [];
 
         foreach ($classesWithExtends as $classWithExtends) {
-            if (!$classWithExtends->extends instanceof \PhpParser\Node\Name) {
+            if (! $classWithExtends->extends instanceof \PhpParser\Node\Name) {
                 continue;
             }
             $toRemove[] = $classWithExtends->extends->toString();
