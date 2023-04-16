@@ -19,6 +19,9 @@ final class UseFinder extends AbstractNodeFinder implements UseFinderInterface
      */
     public function find(array $nodes): array
     {
-        return $this->nodeFinder->findInstanceOf($nodes, UseUse::class);
+        /** @var array<int, UseUse>  $uses */
+        $uses = $this->nodeFinder->findInstanceOf($nodes, UseUse::class);
+
+        return $uses;
     }
 }

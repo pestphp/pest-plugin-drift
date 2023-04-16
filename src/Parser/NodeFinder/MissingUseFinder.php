@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Pestify\Parser\NodeFinder;
 
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\UseUse;
 
 /**
@@ -41,10 +42,12 @@ final class MissingUseFinder implements MissingUseFinderInterface
                 continue;
             }
             $resolvedName = $name->getAttribute('resolvedName');
-            if (in_array($resolvedName->toString(), $uses)) {
+            assert($resolvedName instanceof Name);
+
+            if (in_array($resolvedName->toString(), $uses, true)) {
                 continue;
             }
-            if ((is_countable($resolvedName->parts) ? count($resolvedName->parts) : 0) === 1) {
+            if ((is_countable($resolvedName->parts) ? count($resolvedName->parts) : 0) === 1) { // @phpstan-ignore-line
                 continue;
             }
 

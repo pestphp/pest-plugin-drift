@@ -19,6 +19,9 @@ final class NameFinder extends AbstractNodeFinder implements NameFinderInterface
      */
     public function find(array $nodes): array
     {
-        return $this->nodeFinder->findInstanceOf($nodes, Name::class);
+        /** @var array<int, Name>  $names */
+        $names = $this->nodeFinder->findInstanceOf($nodes, Name::class);
+
+        return $names;
     }
 }

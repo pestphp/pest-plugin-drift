@@ -22,6 +22,9 @@ final class ClassMethodFinder extends AbstractNodeFinder implements ClassMethodF
      */
     public function find(array $nodes): array
     {
-        return $this->nodeFinder->findInstanceOf($nodes, ClassMethod::class);
+        /** @var array<int, ClassMethod>  $classMethods */
+        $classMethods = $this->nodeFinder->findInstanceOf($nodes, ClassMethod::class);
+
+        return $classMethods;
     }
 }

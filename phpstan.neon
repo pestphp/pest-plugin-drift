@@ -16,3 +16,6 @@ parameters:
         - "#is not allowed to extend#"
         - "#but since the containing class is abstract, it should be.#"
         - "#beforeTraverse\\(\\) should be compatible with return type#"
+        - "#enterNode\\(\\) should#"
+        - "#leaveNode\\(\\) should#"
+        - "#with default value#"

@@ -25,6 +25,8 @@ final class Standard extends BaseStandard
             return $this->pFallback($node);
         }
 
+        assert($origNode instanceof Node);
+
         $class = $node::class;
         if ($class !== $origNode::class) {
             return $this->pFallback($node);
@@ -47,7 +49,7 @@ final class Standard extends BaseStandard
     /**
      * {@inheritDoc}
      */
-    protected function pStmt_Expression(Expression $node)
+    protected function pStmt_Expression(Expression $node): string
     {
         $result = parent::pStmt_Expression($node);
 
@@ -57,7 +59,7 @@ final class Standard extends BaseStandard
     /**
      * {@inheritDoc}
      */
-    protected function pStmt_Function(Function_ $node)
+    protected function pStmt_Function(Function_ $node): string
     {
         $result = parent::pStmt_Function($node);
 

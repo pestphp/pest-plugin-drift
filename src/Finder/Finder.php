@@ -19,6 +19,9 @@ final class Finder implements FinderInterface
 
     /**
      * Creates a new finder instance.
+     *
+     * @param  string|array<int, string>  $in
+     * @param  string|array<int, string>  $not
      */
     public function __construct(string|array $in, string|array $not = [])
     {
@@ -35,7 +38,7 @@ final class Finder implements FinderInterface
      */
     public function get(): array
     {
-        return array_map(static fn (SplFileInfo $splFileInfo): File => new File($splFileInfo), iterator_to_array($this->baseFinder));
+        return array_values(array_map(static fn (SplFileInfo $splFileInfo): File => new File($splFileInfo), iterator_to_array($this->baseFinder)));
     }
 
     /**

@@ -39,6 +39,7 @@ final class ConvertCommand extends Command
         $symfonyStyle = new SymfonyStyle($input, $output);
 
         $testsDirectory = $input->getArgument('dir');
+        assert(is_string($testsDirectory));
 
         $symfonyStyle->info("Start converting files from: $testsDirectory");
 

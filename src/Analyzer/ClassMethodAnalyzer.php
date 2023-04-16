@@ -22,7 +22,7 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
             'setUpBeforeClass',
             'tearDown',
             'tearDownAfterClass',
-        ]);
+        ], true);
     }
 
     /**
@@ -37,6 +37,8 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
 
     /**
      * Search @test annotations in comments.
+     *
+     * @param  array<int, Comment>  $comments
      */
     private function containsTestAnnotation(array $comments): bool
     {

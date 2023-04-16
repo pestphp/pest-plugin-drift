@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Pestify\Converters;
 
-use Exception;
+use Pest\Pestify\Exceptions\UnrecoverableException;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
@@ -30,7 +30,7 @@ final class CodeConverter
     /**
      * Convert the code content.
      *
-     * @throws Exception
+     * @throws UnrecoverableException
      */
     public function convert(string $code): string
     {
@@ -39,7 +39,7 @@ final class CodeConverter
         $oldTokens = $this->lexer->getTokens();
 
         if (is_null($currentStatements)) {
-            throw new Exception('The parser was unable to recover from an error.');
+            throw new UnrecoverableException('The parser was unable to recover from an error.');
         }
 
         $newStatements = $this->traverser->traverse($currentStatements);
