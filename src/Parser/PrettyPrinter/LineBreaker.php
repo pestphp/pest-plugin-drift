@@ -43,7 +43,7 @@ final class LineBreaker
 
         assert($next instanceof Node);
 
-        $nextStartLine = $node->getAttribute('startLine');
+        $nextStartLine = $next->getAttribute('startLine');
 
         return $nextStartLine - $endLine > 1;
     }
