@@ -1,5 +1,5 @@
 
-  [90m.[39m
+  .
 
-  [48;2;37;99;235;1m INFO [49;22m The [tests/Fixtures/already-converted-project] directory has been migrated to PEST with 0 files changed.
+   INFO  The [tests/Fixtures/already-converted-project] directory has been migrated to PEST with 0 files changed.
 
