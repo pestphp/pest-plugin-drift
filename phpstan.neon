@@ -18,4 +18,3 @@ parameters:
         - "#beforeTraverse\\(\\) should be compatible with return type#"
         - "#enterNode\\(\\) should#"
         - "#leaveNode\\(\\) should#"
-        - "#with default value#"

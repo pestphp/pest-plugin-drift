@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pest\Drift;
 
-use InvalidArgumentException;
 use Pest\Contracts\Plugins\HandlesArguments;
 use Pest\Drift\Converters\CodeConverterFactory;
 use Pest\Drift\Converters\DirectoryConverter;
@@ -13,8 +12,8 @@ use Pest\Drift\Finder\Finder;
 use Pest\Drift\Support\View;
 use Pest\Exceptions\InvalidOption;
 use Pest\Plugins\Concerns\HandleArguments;
-use Symfony\Component\Console\Output\OutputInterface;
 use function Pest\testDirectory;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @internal
@@ -40,9 +39,9 @@ final class Plugin implements HandlesArguments
             return $arguments;
         }
 
-        $arguments = array_slice($arguments, array_search('--drift', $arguments) + 1);
+        $arguments = array_slice($arguments, (int) array_search('--drift', $arguments, true) + 1);
 
-        if (count($arguments) === 0) {
+        if ($arguments === []) {
             $directory = testDirectory();
         } elseif (count($arguments) === 1) {
             $directory = $arguments[0];
@@ -50,7 +49,6 @@ final class Plugin implements HandlesArguments
             throw new InvalidOption('The [--drift] argument only accepts the directory to convert as argument.');
         }
 
-        // ensure directory does not end with a slash
         $directory = rtrim($directory, '/');
 
         $finder = new Finder($directory);
@@ -69,7 +67,7 @@ final class Plugin implements HandlesArguments
         View::renderUsing($this->output);
         View::render('components.badge', [
             'type' => 'INFO',
-            'content' => 'The [' . $directory . '] directory has been migrated to PEST with ' . $changedTotal . ' files changed.',
+            'content' => 'The ['.$directory.'] directory has been migrated to PEST with '.$changedTotal.' files changed.',
         ]);
 
         exit(0);
