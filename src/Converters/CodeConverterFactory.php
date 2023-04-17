@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Converters;
+namespace Pest\Drift\Converters;
 
-use Pest\Pestify\Parser\PrettyPrinter\Standard;
+use Pest\Drift\Parser\PrettyPrinter\Standard;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;

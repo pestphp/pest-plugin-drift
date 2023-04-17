@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use Pest\Pestify\Console\ConvertCommand;
-use Pest\Pestify\Console\InstallPestCommand;
+use Pest\Drift\Console\ConvertCommand;
+use Pest\Drift\Console\InstallPestCommand;
 use Symfony\Component\Console\Application;
 
 (static function () {
@@ -23,11 +23,12 @@ use Symfony\Component\Console\Application;
     require_once $file;
 })();
 
-$application = new Application('Pest\Pestify', 'dev-main');
+$application = new Application('Pest\Drift', 'dev-main');
 
 $application->addCommands([
     new ConvertCommand(),
-    new InstallPestCommand(),
 ]);
+
+$application->setDefaultCommand('convert', true);
 
 exit($application->run());

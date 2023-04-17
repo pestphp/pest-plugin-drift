@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Rules\Assertions;
+namespace Pest\Drift\Rules\Assertions;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;

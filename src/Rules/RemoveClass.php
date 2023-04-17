@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Rules;
+namespace Pest\Drift\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Rules\Assertions;
+namespace Pest\Drift\Rules\Assertions;
 
-use Pest\Pestify\Rules\AbstractConvertMethodCall;
+use Pest\Drift\Rules\AbstractConvertMethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;

@@ -1,6 +1,6 @@
 {
-    "name": "pestphp/pestify",
-    "description": "The Pestify Project",
+    "name": "pestphp/drift",
+    "description": "The Drift Project",
     "keywords": [
         "php",
         "framework",
@@ -8,7 +8,7 @@
         "unit",
         "test",
         "testing",
-        "pestify"
+        "drift"
     ],
     "license": "MIT",
     "require": {
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Pest\\Pestify\\": "src/"
+            "Pest\\Drift\\": "src/"
         }
     },
     "autoload-dev": {
@@ -26,10 +26,12 @@
     },
     "require-dev": {
         "nikic/php-parser": "^4.15.4",
+        "nunomaduro/termwind": "^1.15.1",
+        "pestphp/pest": "^2.5",
+        "pestphp/pest-dev-tools": "^2.6.0",
         "symfony/console": "^6.2.8",
         "symfony/finder": "^6.2.7",
-        "pestphp/pest": "^2.5",
-        "pestphp/pest-dev-tools": "^2.6.0"
+        "spatie/pest-plugin-snapshots": "^2.0.1"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -41,7 +43,7 @@
         }
     },
     "bin": [
-        "bin/pestify"
+        "bin/drift"
     ],
     "scripts": {
         "refacto": "rector",

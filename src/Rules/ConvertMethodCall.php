@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Rules;
+namespace Pest\Drift\Rules;
 
-use Pest\Pestify\Parser\NodeFinder\NonTestMethodFinderInterface;
+use Pest\Drift\Parser\NodeFinder\NonTestMethodFinderInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;

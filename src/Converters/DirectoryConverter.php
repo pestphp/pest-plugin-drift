@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Converters;
+namespace Pest\Drift\Converters;
 
-use Pest\Pestify\Finder\FinderInterface;
+use Pest\Drift\Finder\FinderInterface;
 
 /**
  * @internal
@@ -22,10 +22,20 @@ final class DirectoryConverter
     /**
      * Convert the files returned by the finder.
      */
-    public function convert(FinderInterface $finder): void
+    public function convert(FinderInterface $finder, callable $callback): int
     {
+        $changedCount = 0;
+
         foreach ($finder->get() as $file) {
-            $this->fileConverter->convert($file);
+            $changed = $this->fileConverter->convert($file);
+
+            $callback($changed);
+
+            if ($changed) {
+                $changedCount++;
+            }
         }
+
+        return $changedCount;
     }
 }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Converters;
+namespace Pest\Drift\Converters;
 
 use Exception;
-use Pest\Pestify\Finder\FileInterface;
+use Pest\Drift\Finder\FileInterface;
 
 /**
  * @internal
@@ -21,16 +21,18 @@ final class FileConverter
     }
 
     /**
-     * Convert the content of the file.
+     * Convert the content of the file, and check if it has been converted.
      *
      * @throws Exception
      */
-    public function convert(FileInterface $file): void
+    public function convert(FileInterface $file): bool
     {
         file_put_contents(
             $this->resolveOutputPath($file),
-            $this->codeConverter->convert($file->getContents())
+            $convertedContents = $this->codeConverter->convert($originalContents = $file->getContents())
         );
+
+        return $convertedContents !== $originalContents;
     }
 
     /**

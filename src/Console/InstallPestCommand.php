@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Console;
+namespace Pest\Drift\Console;
 
 use Composer\Console\Application;
 use Symfony\Component\Console\Command\Command;

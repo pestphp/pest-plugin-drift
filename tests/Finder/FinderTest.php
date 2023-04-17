@@ -1,6 +1,6 @@
 <?php
 
-use Pest\Pestify\Finder\Finder;
+use Pest\Drift\Finder\Finder;
 
 it('find test file in one directory', function () {
     $finder = new Finder(tmpDir('sources/Alpha'));

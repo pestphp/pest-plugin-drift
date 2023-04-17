@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Finder;
+namespace Pest\Drift\Finder;
 
 use Symfony\Component\Finder\Finder as BaseFinder;
 use Symfony\Component\Finder\SplFileInfo;

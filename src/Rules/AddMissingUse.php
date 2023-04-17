@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Rules;
+namespace Pest\Drift\Rules;
 
-use Pest\Pestify\Parser\NodeFinder\MissingUseFinderInterface;
+use Pest\Drift\Parser\NodeFinder\MissingUseFinderInterface;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;

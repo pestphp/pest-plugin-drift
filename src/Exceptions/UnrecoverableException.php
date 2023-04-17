@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Exceptions;
+namespace Pest\Drift\Exceptions;
 
 use Exception;
 

@@ -1,8 +1,8 @@
 <?php
 
-use Pest\Pestify\Converters\CodeConverterFactory;
-use Pest\Pestify\Converters\FileConverter;
-use Pest\Pestify\Finder\File;
+use Pest\Drift\Converters\CodeConverterFactory;
+use Pest\Drift\Converters\FileConverter;
+use Pest\Drift\Finder\File;
 use Symfony\Component\Finder\SplFileInfo;
 
 it('create converted file', function () {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Analyzer;
+namespace Pest\Drift\Analyzer;
 
 use PhpParser\Comment;
 use PhpParser\Node\Stmt\ClassMethod;

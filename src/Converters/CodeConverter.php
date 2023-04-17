@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Converters;
+namespace Pest\Drift\Converters;
 
-use Pest\Pestify\Exceptions\UnrecoverableException;
+use Pest\Drift\Exceptions\UnrecoverableException;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;

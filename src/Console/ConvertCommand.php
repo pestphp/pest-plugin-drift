@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Console;
+namespace Pest\Drift\Console;
 
-use Pest\Pestify\Converters\CodeConverterFactory;
-use Pest\Pestify\Converters\DirectoryConverter;
-use Pest\Pestify\Converters\FileConverter;
-use Pest\Pestify\Finder\Finder;
+use Pest\Drift\Converters\CodeConverterFactory;
+use Pest\Drift\Converters\DirectoryConverter;
+use Pest\Drift\Converters\FileConverter;
+use Pest\Drift\Finder\Finder;
+use Pest\Drift\Support\View;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,7 +27,9 @@ final class ConvertCommand extends Command
     protected function configure(): void
     {
         $this->setName('convert');
-        $this->addArgument('dir', InputArgument::REQUIRED, 'Test directory');
+
+        $this->addArgument('dir', InputArgument::OPTIONAL, 'Test directory', 'tests');
+
         $this->addOption('exclude', 'e', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY);
         $this->addOption('output', 'd', InputOption::VALUE_REQUIRED);
     }
@@ -41,8 +44,6 @@ final class ConvertCommand extends Command
         $testsDirectory = $input->getArgument('dir');
         assert(is_string($testsDirectory));
 
-        $symfonyStyle->info("Start converting files from: $testsDirectory");
-
         $finder = new Finder($testsDirectory, $input->getOption('exclude'));
 
         $outputDir = $input->getOption('output') ?? $input->getArgument('dir');
@@ -51,9 +52,21 @@ final class ConvertCommand extends Command
 
         $directoryConverter = new DirectoryConverter(new FileConverter($codeConverterFactory->codeConverter(), $outputDir));
 
-        $directoryConverter->convert($finder);
 
-        $symfonyStyle->info("Done! {$finder->count()} files have been processed.");
+        $symfonyStyle->newLine();
+        $symfonyStyle->write('  ');
+
+        $changedTotal = $directoryConverter->convert($finder, function (bool $changed) use ($symfonyStyle): void {
+            $symfonyStyle->write($changed ? '<fg=green;options=bold>✔</>' : '<fg=gray>.</>');
+        });
+
+        $symfonyStyle->newLine();
+
+        View::renderUsing($symfonyStyle);
+        View::render('components.badge', [
+            'type' => 'INFO',
+            'content' => 'The [' . $testsDirectory . '] directory has been migrated to PEST with ' . $changedTotal . ' files changed.',
+        ]);
 
         return Command::SUCCESS;
     }

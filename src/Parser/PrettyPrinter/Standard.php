@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Parser\PrettyPrinter;
+namespace Pest\Drift\Parser\PrettyPrinter;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;

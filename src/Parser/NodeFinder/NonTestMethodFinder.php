@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pest\Pestify\Parser\NodeFinder;
+namespace Pest\Drift\Parser\NodeFinder;
 
-use Pest\Pestify\Analyzer\ClassMethodAnalyzerInterface;
+use Pest\Drift\Analyzer\ClassMethodAnalyzerInterface;
 use PhpParser\Node\Stmt\ClassMethod;
 
 /**

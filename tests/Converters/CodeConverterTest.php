@@ -1,6 +1,6 @@
 <?php
 
-use Pest\Pestify\Converters\CodeConverterFactory;
+use Pest\Drift\Converters\CodeConverterFactory;
 
 function codeConverter()
 {
@@ -39,7 +39,7 @@ it('remove unnecessary use', function () {
 
 it('convert extends class to uses method', function () {
     $code = '<?php
-        use Pest\Pestify\Tests\Fixtures\FixtureTestCase;
+        use Pest\Drift\Tests\Fixtures\FixtureTestCase;
 
         class MyTest extends FixtureTestCase {}
     ';
@@ -47,8 +47,8 @@ it('convert extends class to uses method', function () {
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)
-        ->not->toContain('use Pest\Pestify\Tests\Fixtures\FixtureTestCase;')
-        ->toContain("uses(\Pest\Pestify\Tests\Fixtures\FixtureTestCase::class);");
+        ->not->toContain('use Pest\Drift\Tests\Fixtures\FixtureTestCase;')
+        ->toContain("uses(\Pest\Drift\Tests\Fixtures\FixtureTestCase::class);");
 });
 
 it('doesnt convert extends PhpUnit TestCase', function () {
@@ -166,9 +166,9 @@ it('keep using traits', function () {
 
 it('add missing use', function () {
     $code = '<?php
-        namespace Pest\Pestify\Tests;
+        namespace Pest\Drift\Tests;
 
-        use Pest\Pestify\Tests\Helper\Foo;
+        use Pest\Drift\Tests\Helper\Foo;
 
         class MyTest {
             public function test_foo()
@@ -182,7 +182,7 @@ it('add missing use', function () {
 
     $convertedCode = codeConverter()->convert($code);
 
-    expect($convertedCode)->toContain('use \Pest\Pestify\Tests\Bar;');
+    expect($convertedCode)->toContain('use \Pest\Drift\Tests\Bar;');
 });
 
 it('keep multiline statements', function () {
@@ -270,7 +270,7 @@ it('convert assertEquals to Pest expectation', function () {
 
 it('convert assertInstanceOf to Pest expectation', function () {
     $code = '<?php
-        use Pest\Pestify\Tests\Fixtures\Some\Thing;
+        use Pest\Drift\Tests\Fixtures\Some\Thing;
         class MyTest {
             public function test_instanceof()
             {
@@ -282,7 +282,7 @@ it('convert assertInstanceOf to Pest expectation', function () {
     $convertedCode = codeConverter()->convert($code);
 
     expect($convertedCode)
-        ->toContain('use Pest\Pestify\Tests\Fixtures\Some\Thing;')
+        ->toContain('use Pest\Drift\Tests\Fixtures\Some\Thing;')
         ->toContain('expect($thing)->toBeInstanceOf(Thing::class)');
 });
 

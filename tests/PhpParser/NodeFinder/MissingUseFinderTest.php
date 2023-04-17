@@ -1,8 +1,8 @@
 <?php
 
-use Pest\Pestify\Parser\NodeFinder\MissingUseFinder;
-use Pest\Pestify\Parser\NodeFinder\NameFinder;
-use Pest\Pestify\Parser\NodeFinder\UseFinder;
+use Pest\Drift\Parser\NodeFinder\MissingUseFinder;
+use Pest\Drift\Parser\NodeFinder\NameFinder;
+use Pest\Drift\Parser\NodeFinder\UseFinder;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\UseUse;

@@ -91,7 +91,7 @@ function cleanFixtures()
 
 function tmpDir(string $path = '')
 {
-    $tmpDir = realpath(sys_get_temp_dir()).'/pestify';
+    $tmpDir = realpath(sys_get_temp_dir()).'/drift';
 
     return $tmpDir.'/'.$path;
 }
