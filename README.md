@@ -1,4 +1,4 @@
-This repository contains the Drift project.
+This repository contains the Pest Plugin Drift.
 
 > If you want to start testing your application with Pest, visit the main **[Pest Repository](https://github.com/pestphp/pest)**.
 

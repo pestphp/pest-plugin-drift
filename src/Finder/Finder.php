@@ -21,16 +21,14 @@ final class Finder implements FinderInterface
      * Creates a new finder instance.
      *
      * @param  string|array<int, string>  $in
-     * @param  string|array<int, string>  $not
      */
-    public function __construct(string|array $in, string|array $not = [])
+    public function __construct(string|array $in)
     {
         $this->baseFinder = (new BaseFinder())
             ->files()
-            ->name('*Test.php')
+            ->name('*Test.php') // @todo Infer this from the configuration...
             ->exclude('vendor')
-            ->in($in)
-            ->notPath($not);
+            ->in($in);
     }
 
     /**
