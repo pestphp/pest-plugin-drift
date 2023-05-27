@@ -14,6 +14,7 @@ parameters:
 
     ignoreErrors:
         - "#is not allowed to extend#"
+        - "#has a nullable return type declaration.#"
         - "#but since the containing class is abstract, it should be.#"
         - "#beforeTraverse\\(\\) should be compatible with return type#"
         - "#enterNode\\(\\) should#"
