@@ -132,7 +132,7 @@ it('convert non test method', function () {
     expect($convertedCode)
         ->toContain('function thisIsNotATest()')
         ->not->toContain('protected function thisIsNotATest()')
-        ->toContain('thisIsNotATest()')
+        ->toContain('thisIsNotATest();')
         ->not->toContain('$this->thisIsNotATest()');
 });
 
@@ -248,9 +248,24 @@ function first_method()
 
 function second_method()
 {
-}";
+}
+";
 
     expect($convertedCode)->toContain($expected);
+});
+
+it('does not duplicate break line', function () {
+    $code = '<?php
+test("the application returns a successful response", function () {
+    $response = $this->get("/");
+
+    $response->assertStatus(200);
+});
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toEqual($code);
 });
 
 it('convert assertEquals to Pest expectation', function () {

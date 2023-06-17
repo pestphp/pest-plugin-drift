@@ -36,7 +36,7 @@ final class ConvertNonTestMethod extends AbstractConvertClassMethod
     private function convertClassMethod(ClassMethod $classMethod): Function_
     {
         return new Function_(
-            $classMethod->name,
+            $classMethod->name->toString(),
             [
                 'byRef' => $classMethod->byRef,
                 'params' => $classMethod->params,
