@@ -18,6 +18,8 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class ExtendsToUses extends NodeVisitorAbstract
 {
+    private ?Expression $usesStmt = null;
+
     private const EXCLUDED_TEST_CASE = [
         'PHPUnit\Framework\TestCase',
         'Tests\TestCase',
@@ -44,7 +46,7 @@ final class ExtendsToUses extends NodeVisitorAbstract
 
         $resolvedName->setAttributes([]);
 
-        $usesStmt = new Expression(
+        $this->usesStmt = new Expression(
             new FuncCall(
                 new Name('uses'),
                 [
@@ -53,8 +55,15 @@ final class ExtendsToUses extends NodeVisitorAbstract
             )
         );
 
-        array_unshift($node->stmts, $usesStmt);
-
         return $node;
+    }
+
+    public function afterTraverse(array $nodes): ?array
+    {
+        if ($this->usesStmt instanceof Expression) {
+            array_unshift($nodes, $this->usesStmt);
+        }
+
+        return $nodes;
     }
 }

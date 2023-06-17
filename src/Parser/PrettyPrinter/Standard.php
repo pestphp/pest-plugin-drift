@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Pest\Drift\Parser\PrettyPrinter;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard as BaseStandard;
 
 /**
@@ -32,37 +31,33 @@ final class Standard extends BaseStandard
             return $this->pFallback($node);
         }
 
-        $startPos = $origNode->getStartTokenPos();
-        $endPos = $origNode->getEndTokenPos();
-        if ($startPos < 0) {
-            return $this->pFallback($node);
-        }
-        if ($endPos < 0) {
-            return $this->pFallback($node);
-        }
-
-        $result = parent::p($node, $parentFormatPreserved);
-
-        return LineBreaker::breakLineIfNecessary($node, $result);
+        return parent::p($node, $parentFormatPreserved);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function pStmt_Expression(Expression $node): string
+    protected function pStmts(array $nodes, bool $indent = true): string
     {
-        $result = parent::pStmt_Expression($node);
+        if ($indent) {
+            $this->indent();
+        }
 
-        return LineBreaker::breakLineIfNecessary($node, $result);
-    }
+        $result = '';
+        foreach ($nodes as $node) {
+            $comments = $node->getComments();
+            if ($comments !== []) {
+                $result .= $this->nl.$this->pComments($comments);
+                if ($node instanceof Nop) {
+                    continue;
+                }
+            }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function pStmt_Function(Function_ $node): string
-    {
-        $result = parent::pStmt_Function($node);
+            $result .= $this->nl.$this->p($node);
+            $result = LineBreaker::breakLineIfNecessary($node, $result);
+        }
 
-        return LineBreaker::breakLineIfNecessary($node, $result);
+        if ($indent) {
+            $this->outdent();
+        }
+
+        return $result;
     }
 }
