@@ -40,9 +40,6 @@
             "pestphp/pest-plugin": true
         }
     },
-    "bin": [
-        "bin/drift"
-    ],
     "scripts": {
         "refacto": "rector",
         "lint": "pint",
