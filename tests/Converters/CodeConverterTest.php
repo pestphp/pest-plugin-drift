@@ -268,6 +268,74 @@ test("the application returns a successful response", function () {
     expect($convertedCode)->toEqual($code);
 });
 
+it('add break line after uses statements', function () {
+    $code = '<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\CustomTestCase;
+
+class ExampleTest extends CustomTestCase
+{
+    use RefreshDatabase;
+
+    public function test_login_screen_can_be_rendered(): void
+    {
+    }
+}
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = "<?php
+
+uses(\Tests\CustomTestCase::class);
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
+test('login screen can be rendered', function () {
+});
+";
+
+    expect($convertedCode)->toEqual($expected);
+});
+
+it('keep break line after use statements', function () {
+    $code = '<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_login_screen_can_be_rendered(): void
+    {
+    }
+}
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = "<?php
+
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
+test('login screen can be rendered', function () {
+});
+";
+
+    expect($convertedCode)->toEqual($expected);
+});
+
 it('convert assertEquals to Pest expectation', function () {
     $code = '<?php
         class MyTest {

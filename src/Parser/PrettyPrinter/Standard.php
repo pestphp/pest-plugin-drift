@@ -6,6 +6,7 @@ namespace Pest\Drift\Parser\PrettyPrinter;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard as BaseStandard;
 
 /**
@@ -41,7 +42,7 @@ final class Standard extends BaseStandard
         }
 
         $result = '';
-        foreach ($nodes as $node) {
+        foreach ($nodes as $i => $node) {
             $comments = $node->getComments();
             if ($comments !== []) {
                 $result .= $this->nl.$this->pComments($comments);
@@ -51,6 +52,12 @@ final class Standard extends BaseStandard
             }
 
             $result .= $this->nl.$this->p($node);
+
+            $nextNode = $nodes[$i + 1];
+            if ($node instanceof Use_ && (! $nextNode instanceof Use_)) {
+                $result .= $this->nl;
+            }
+
             $result = LineBreaker::breakLineIfNecessary($node, $result);
         }
 

@@ -27,7 +27,7 @@ final class TraitToUses extends NodeVisitorAbstract
             return null;
         }
 
-        return array_map(static fn (Name $trait): Expression => new Expression(
+        $usesStatements = array_map(static fn (Name $trait): Expression => new Expression(
             new FuncCall(
                 new Name('uses'),
                 [
@@ -35,5 +35,10 @@ final class TraitToUses extends NodeVisitorAbstract
                 ]
             )
         ), $node->traits);
+
+        return array_merge(
+            $usesStatements,
+            [new Node\Stmt\Nop()]
+        );
     }
 }
