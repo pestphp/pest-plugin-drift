@@ -52,6 +52,14 @@ final class Plugin implements HandlesArguments
             throw new InvalidOption('The [--drift] argument only accepts the directory to convert as argument.');
         }
 
+        if (! file_exists($testsDirectory.'/Pest.php')) {
+            $initPlugin = Container::getInstance()->get(Init::class);
+
+            assert($initPlugin instanceof Init);
+
+            $initPlugin->init();
+        }
+
         $directory = rtrim($directory, '/');
 
         $finder = new Finder($directory);
@@ -68,14 +76,6 @@ final class Plugin implements HandlesArguments
         $this->output->writeln('');
 
         $testsDirectory = TestSuite::getInstance()->rootPath.'/'.TestSuite::getInstance()->testPath;
-
-        if (! file_exists($testsDirectory.'/Pest.php')) {
-            $initPlugin = Container::getInstance()->get(Init::class);
-
-            assert($initPlugin instanceof Init);
-
-            $initPlugin->init();
-        }
 
         View::renderUsing($this->output);
         View::render('components.badge', [
