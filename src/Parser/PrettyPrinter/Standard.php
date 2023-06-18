@@ -53,7 +53,7 @@ final class Standard extends BaseStandard
 
             $result .= $this->nl.$this->p($node);
 
-            $nextNode = $nodes[$i + 1];
+            $nextNode = $nodes[$i + 1] ?? null;
             if ($node instanceof Use_ && (! $nextNode instanceof Use_)) {
                 $result .= $this->nl;
             }

@@ -14,8 +14,8 @@ use Pest\Exceptions\InvalidOption;
 use Pest\Plugins\Concerns\HandleArguments;
 use Pest\Plugins\Init;
 use Pest\Support\Container;
-use Pest\TestSuite;
 use function Pest\testDirectory;
+use Pest\TestSuite;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -67,10 +67,14 @@ final class Plugin implements HandlesArguments
 
         $this->output->writeln('');
 
-        $testsDirectory = TestSuite::getInstance()->rootPath . '/' . TestSuite::getInstance()->testPath;
+        $testsDirectory = TestSuite::getInstance()->rootPath.'/'.TestSuite::getInstance()->testPath;
 
-        if (! file_exists($testsDirectory . '/Pest.php')) {
-            Container::getInstance()->get(Init::class)->init();
+        if (! file_exists($testsDirectory.'/Pest.php')) {
+            $initPlugin = Container::getInstance()->get(Init::class);
+
+            assert($initPlugin instanceof Init);
+
+            $initPlugin->init();
         }
 
         View::renderUsing($this->output);
