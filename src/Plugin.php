@@ -52,12 +52,16 @@ final class Plugin implements HandlesArguments
             throw new InvalidOption('The [--drift] argument only accepts the directory to convert as argument.');
         }
 
+        $testsDirectory = TestSuite::getInstance()->rootPath.'/'.TestSuite::getInstance()->testPath;
+
         if (! file_exists($testsDirectory.'/Pest.php')) {
             $initPlugin = Container::getInstance()->get(Init::class);
 
             assert($initPlugin instanceof Init);
 
             $initPlugin->init();
+        } else {
+            $this->output->writeln('');
         }
 
         $directory = rtrim($directory, '/');
@@ -66,7 +70,6 @@ final class Plugin implements HandlesArguments
         $codeConverterFactory = (new CodeConverterFactory());
         $directoryConverter = new DirectoryConverter(new FileConverter($codeConverterFactory->codeConverter(), $directory));
 
-        $this->output->writeln('');
         $this->output->write('  ');
 
         $changedTotal = $directoryConverter->convert($finder, function (bool $changed): void {
@@ -74,8 +77,6 @@ final class Plugin implements HandlesArguments
         });
 
         $this->output->writeln('');
-
-        $testsDirectory = TestSuite::getInstance()->rootPath.'/'.TestSuite::getInstance()->testPath;
 
         View::renderUsing($this->output);
         View::render('components.badge', [
