@@ -406,6 +406,34 @@ dataset(\'emailProvider\', function () {
     expect($convertedCode)->toEqual($expected);
 });
 
+it('remove annotations', function () {
+    $code = "<?php
+
+namespace Tests\Feature;
+
+// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    /**
+     * A basic test example.
+     */
+    public function test_the_application_returns_a_successful_response(): void
+    {
+    }
+}";
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = "<?php
+
+test('the application returns a successful response', function () {
+});";
+
+    expect($convertedCode)->toEqual($expected);
+});
+
 it('convert assertEquals to Pest expectation', function () {
     $code = '<?php
         class MyTest {
