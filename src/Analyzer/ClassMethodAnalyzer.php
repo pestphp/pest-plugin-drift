@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Pest\Drift\Analyzer;
 
-use PhpParser\Comment;
+use Pest\Drift\ValueObject\Node\AttributeKey;
+use Pest\Drift\ValueObject\PhpDoc\TagKey;
 use PhpParser\Node\Stmt\ClassMethod;
 
 /**
@@ -30,20 +31,17 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
      */
     public function isTestMethod(ClassMethod $classMethod): bool
     {
-        $comments = $classMethod->getComments();
-
-        return str_starts_with($classMethod->name->toString(), 'test') || $this->containsTestAnnotation($comments);
+        return str_starts_with($classMethod->name->toString(), 'test') || $this->containsTestAnnotation($classMethod);
     }
 
     /**
      * Search @test annotations in comments.
-     *
-     * @param  array<int, Comment>  $comments
      */
-    private function containsTestAnnotation(array $comments): bool
+    private function containsTestAnnotation(ClassMethod $classMethod): bool
     {
-        $testAnnotations = array_filter($comments, static fn (Comment $comment): bool => str_contains($comment->getText(), '@test'));
+        /** @var array<string, array<int, string>> $phpDocTags */
+        $phpDocTags = $classMethod->getAttribute(AttributeKey::PHP_DOC_TAGS, []);
 
-        return $testAnnotations !== [];
+        return array_key_exists(TagKey::TEST, $phpDocTags);
     }
 }
