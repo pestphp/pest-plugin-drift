@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 $classMethodAnalyzer = new \Pest\Drift\Analyzer\ClassMethodAnalyzer();
 $nodeFinder = new \PhpParser\NodeFinder();
+$phpDocTagExtractor = new \Pest\Drift\Extractor\PhpDocTagExtractor();
 
 return [
+    new \Pest\Drift\NodeDecorator\PhpDocTagDecorator($phpDocTagExtractor),
+    new \Pest\Drift\NodeDecorator\DataProviderDecorator($nodeFinder, $phpDocTagExtractor),
     new \Pest\Drift\Rules\RemoveClass(),
     new \Pest\Drift\Rules\RemoveNamespace(),
     new \Pest\Drift\Rules\ExtendsToUses(),

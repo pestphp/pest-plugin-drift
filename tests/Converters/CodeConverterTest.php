@@ -336,6 +336,42 @@ test('login screen can be rendered', function () {
     expect($convertedCode)->toEqual($expected);
 });
 
+it('convert data providers to dataset', function () {
+    $code = '<?php
+
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    /**
+     * @dataProvider emailProvider
+     */
+    public function testHasEmails(string $email)
+    {
+    }
+
+    public function emailProvider()
+    {
+        return ["example@example.com", "other@example.com"];
+    }
+}
+';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '<?php
+
+test(\'has emails\', function (string $email) {
+})->with(\'emailProvider\');
+
+dataset(\'emailProvider\', function () {
+    return ["example@example.com", "other@example.com"];
+});
+';
+
+    expect($convertedCode)->toEqual($expected);
+});
+
 it('convert assertEquals to Pest expectation', function () {
     $code = '<?php
         class MyTest {

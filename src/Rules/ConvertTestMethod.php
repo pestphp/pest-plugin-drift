@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Pest\Drift\Rules;
 
+use Pest\Drift\ValueObject\Node\AttributeKey;
+use Pest\Drift\ValueObject\PhpDoc\TagKey;
 use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -27,11 +29,12 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     {
         $methodName = $classMethod->name->toString();
         $attributes = $classMethod->getAttributes();
-        $dependsArgument = [];
+        $comments = $classMethod->getComments();
+        /** @var array<string, array<int, string>> $phpDocTags */
+        $phpDocTags = $classMethod->getAttribute(AttributeKey::PHP_DOC_TAGS, []);
 
-        if ($classMethod->hasAttribute('comments')) {
-            $dependsArgument = $this->extractDependsArgument($attributes['comments']);
-            $attributes['comments'] = $this->cleanComments($attributes['comments']);
+        if ($comments !== []) {
+            $attributes['comments'] = $this->cleanComments($comments);
         }
 
         // Build test function.
@@ -46,13 +49,8 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
             ]
         );
 
-        if ($dependsArgument !== []) {
-            $testCall = new MethodCall(
-                $testCall,
-                'depends',
-                $dependsArgument
-            );
-        }
+        $testCall = $this->addDepends($testCall, $phpDocTags);
+        $testCall = $this->addDataset($testCall, $phpDocTags);
 
         return new Expression($testCall, $attributes);
     }
@@ -78,6 +76,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
             $text = $comment->getText();
             $text = (string) preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
             $text = (string) preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
+            $text = (string) preg_replace('/\*[^\*]*(@dataProvider)[^\*]*/m', '', $text);
 
             return new Comment($text, $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
         }, $comments);
@@ -89,24 +88,42 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     }
 
     /**
-     * Search @depends annotations in comments and build depends argument with them.
-     *
-     * @param  array<int, Comment>  $comments
-     * @return array<int, Arg>
+     * @param  array<string, array<int, string>>  $phpDocTags
      */
-    private function extractDependsArgument(array $comments): array
+    private function addDepends(Node\Expr\CallLike $testCall, array $phpDocTags): Node\Expr\CallLike
     {
-        $dependsArgument = [];
+        $depends = $phpDocTags[TagKey::DEPENDS] ?? [];
+        $dependsArgument = array_map(fn ($testName): \PhpParser\Node\Arg => new Arg(new String_($this->methodNameToDescription($testName))), $depends);
 
-        $dependAnnotations = array_filter($comments, static fn (Comment $comment): bool => str_contains($comment->getText(), '@depends'));
-
-        foreach ($dependAnnotations as $dependAnnotation) {
-            preg_match_all('/@depends ([^ ]*) *$/m', $dependAnnotation->getText(), $matches);
-
-            $dependsArgument = array_map(fn ($testName): \PhpParser\Node\Arg => new Arg(new String_($this->methodNameToDescription($testName))), $matches[1]);
+        if ($dependsArgument !== []) {
+            return new MethodCall(
+                $testCall,
+                'depends',
+                $dependsArgument
+            );
         }
 
-        return $dependsArgument;
+        return $testCall;
+    }
+
+    /**
+     * @param  array<string, array<int, string>>  $phpDocTags
+     */
+    private function addDataset(Node\Expr\CallLike $testCall, array $phpDocTags): Node\Expr\CallLike
+    {
+        $dataProviders = $phpDocTags[TagKey::DATA_PROVIDER] ?? [];
+
+        $datasetArgument = array_map(fn ($datasetName): \PhpParser\Node\Arg => new Arg(new String_($datasetName)), $dataProviders);
+
+        if ($datasetArgument !== []) {
+            return new MethodCall(
+                $testCall,
+                'with',
+                $datasetArgument
+            );
+        }
+
+        return $testCall;
     }
 
     /**
