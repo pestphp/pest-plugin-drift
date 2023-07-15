@@ -17,7 +17,7 @@ final class RemoveProperties extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function leaveNode(Node $node): int|null
+    public function leaveNode(Node $node): ?int
     {
         if ($node instanceof Property) {
             return NodeTraverser::REMOVE_NODE;
