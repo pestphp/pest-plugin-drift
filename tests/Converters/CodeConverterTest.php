@@ -23,6 +23,40 @@ it('remove class', function () {
     expect($convertedCode)->not->toContain('class FooTest');
 });
 
+it('keep anonymous class', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_foo(): void
+            {
+                $step = new class
+                {
+                    public function testFunction(): array
+                    {
+                        return [];
+                    }
+                };
+                $result = (new ExampleClass())->exampleMethod([$step]);
+                $this->assertTrue($result);
+            }
+        }';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '<?php
+        test(\'foo\', function () {
+    $step = new class
+    {
+        test(\'function\', function () {
+            return [];
+        });
+    };
+    $result = (new ExampleClass())->exampleMethod([$step]);
+    expect($result)->toBeTrue();
+});';
+
+    expect($convertedCode)->toEqual($expected);
+});
+
 it('remove unnecessary use', function () {
     $code = '<?php
         use PHPUnit\Framework\TestCase;
