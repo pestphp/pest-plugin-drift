@@ -51,6 +51,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
 
         $testCall = $this->addDepends($testCall, $phpDocTags);
         $testCall = $this->addDataset($testCall, $phpDocTags);
+        $testCall = $this->addGroup($testCall, $phpDocTags);
 
         return new Expression($testCall, $attributes);
     }
@@ -77,6 +78,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
             $text = (string) preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
             $text = (string) preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
             $text = (string) preg_replace('/\*[^\*]*(@dataProvider)[^\*]*/m', '', $text);
+            $text = (string) preg_replace('/\*[^\*]*(@group)[^\*]*/m', '', $text);
 
             return new Comment($text, $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
         }, $comments);
@@ -120,6 +122,26 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
                 $testCall,
                 'with',
                 $datasetArgument
+            );
+        }
+
+        return $testCall;
+    }
+
+    /**
+     * @param  array<string, array<int, string>>  $phpDocTags
+     */
+    private function addGroup(Node\Expr\CallLike $testCall, array $phpDocTags): Node\Expr\CallLike
+    {
+        $groups = $phpDocTags[TagKey::GROUP] ?? [];
+
+        $groupArgument = array_map(fn ($groupName): \PhpParser\Node\Arg => new Arg(new String_($groupName)), $groups);
+
+        if ($groupArgument !== []) {
+            return new MethodCall(
+                $testCall,
+                'group',
+                $groupArgument
             );
         }
 
