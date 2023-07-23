@@ -1056,6 +1056,31 @@ it('convert assertStringEndsWith to PestExpectation', function () {
     expect($convertedCode)->toContain('expect("Hello World")->toEndWith("Hello")');
 });
 
+it('convert @group to pest group', function () {
+    $code = '
+<?php
+
+class MyTest {
+    /**
+     * @group actions
+     * @group fortify
+     */
+    public function test_one()
+    {
+
+    }
+}';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '<?php
+
+test(\'one\', function () {
+})->group(\'actions\', \'fortify\');';
+
+    expect($convertedCode)->toEqual($expected);
+});
+
 it('convert @depends to pest depends', function () {
     $code = '<?php
         class MyTest {

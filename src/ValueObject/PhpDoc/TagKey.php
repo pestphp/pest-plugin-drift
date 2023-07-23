@@ -11,4 +11,6 @@ final class TagKey
     public const DEPENDS = '@depends';
 
     public const DATA_PROVIDER = '@dataProvider';
+
+    public const GROUP = '@group';
 }
