@@ -28,8 +28,7 @@
         }
     },
     "require-dev": {
-        "pestphp/pest-dev-tools": "^2.12.0",
-        "spatie/pest-plugin-snapshots": "^2.0.1"
+        "pestphp/pest-dev-tools": "^2.12.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

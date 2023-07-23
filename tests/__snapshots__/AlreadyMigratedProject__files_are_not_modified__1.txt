@@ -1,5 +1,0 @@
-
-  .
-
-   INFO  The [tests/Fixtures/already-converted-project] directory has been migrated to PEST with 0 files changed.
-
