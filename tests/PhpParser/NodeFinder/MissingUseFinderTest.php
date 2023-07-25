@@ -5,6 +5,7 @@ use Pest\Drift\Parser\NodeFinder\NameFinder;
 use Pest\Drift\Parser\NodeFinder\UseFinder;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeFinder;
 
@@ -27,4 +28,20 @@ it('does not return duplicates', function () {
     $missingUses = missingUseFinder()->find($nodes);
 
     expect($missingUses)->toHaveCount(1);
+});
+
+it('does not flag use in group as missing', function () {
+    $groupUse = new GroupUse(new Name('Foo'), []);
+    $groupUse->uses[] = new UseUse(new Name('Bar'), attributes: [
+        'parent' => $groupUse,
+    ]);
+
+    $nodes = [
+        $groupUse,
+        new Name('Bar', ['resolvedName' => new FullyQualified('Foo\Bar'), 'startLine' => 1]),
+    ];
+
+    $missingUses = missingUseFinder()->find($nodes);
+
+    expect($missingUses)->toHaveCount(0);
 });

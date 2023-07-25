@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Drift\Parser\NodeFinder;
 
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\UseUse;
 
 /**
@@ -27,7 +28,15 @@ final class MissingUseFinder implements MissingUseFinderInterface
      */
     public function find(array $nodes): array
     {
-        $uses = array_map(fn (UseUse $useUse): string => $useUse->name->toString(), $this->useFinder->find($nodes));
+        $uses = array_map(function (UseUse $useUse): string {
+            $parent = $useUse->getAttribute('parent');
+
+            if ($parent instanceof GroupUse) {
+                return $parent->prefix->toString().'\\'.$useUse->name->toString();
+            }
+
+            return $useUse->name->toString();
+        }, $this->useFinder->find($nodes));
 
         $names = $this->nameFinder->find($nodes);
 
