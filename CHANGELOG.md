@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [v2.2.0 (2023-07-25)](https://github.com/pestphp/pest/compare/v2.1.0...v2.2.0)
+
+### Added
+
+- Removes annotations ([#14](https://github.com/pestphp/pest-plugin-drift/pull/14))
+
+### Fixed
+
+- Duplicates uses in groups ([#19](https://github.com/pestphp/pest-plugin-drift/pull/19))
+
 ## [v2.1.0 (2023-07-23)](https://github.com/pestphp/pest/compare/v2.0.0...v2.1.0)
 
 ### Added
