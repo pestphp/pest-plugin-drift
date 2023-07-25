@@ -6,7 +6,6 @@ namespace Pest\Drift\Rules;
 
 use Pest\Drift\ValueObject\Node\AttributeKey;
 use Pest\Drift\ValueObject\PhpDoc\TagKey;
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
@@ -34,7 +33,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
         $phpDocTags = $classMethod->getAttribute(AttributeKey::PHP_DOC_TAGS, []);
 
         if ($comments !== []) {
-            $attributes['comments'] = $this->cleanComments($comments);
+            $attributes['comments'] = [];
         }
 
         // Build test function.
@@ -62,31 +61,6 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     protected function filter(ClassMethod $classMethod): bool
     {
         return $this->classMethodAnalyzer->isTestMethod($classMethod);
-    }
-
-    /**
-     * Remove unnecessary annotations and clean empty comments
-     *
-     * @param  array<int, Comment>  $comments
-     * @return array<int, Comment>
-     */
-    private function cleanComments(array $comments): array
-    {
-        // Remove unnecessary comments.
-        $comments = array_map(static function (Comment $comment): Comment {
-            $text = $comment->getText();
-            $text = (string) preg_replace('/\*[^\*]*(@test)[^\*]*/m', '', $text);
-            $text = (string) preg_replace('/\*[^\*]*(@depends)[^\*]*/m', '', $text);
-            $text = (string) preg_replace('/\*[^\*]*(@dataProvider)[^\*]*/m', '', $text);
-            $text = (string) preg_replace('/\*[^\*]*(@group)[^\*]*/m', '', $text);
-
-            return new Comment($text, $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
-        }, $comments);
-
-        // Remove empty comments
-        $comments = array_filter($comments, static fn (Comment $comment): bool => preg_match('|^/\*[\s\*]*\*+/$|', $comment->getText()) == 0);
-
-        return $comments;
     }
 
     /**
