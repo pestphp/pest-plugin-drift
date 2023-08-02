@@ -1173,3 +1173,33 @@ it('can convert multiple @depends to pest depends', function () {
         ->not->toContain('@depends test_two')
         ->toContain("->depends('one', 'two')");
 });
+
+it('convert custom message in expectation', function () {
+    $code = '<?php
+class MyTest {
+    public function test_one()
+    {
+        $condition = false;
+        $message = "My custom message";
+
+        $this->assertTrue(
+            $condition,
+            $message
+        );
+    }
+}
+';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '<?php
+test(\'one\', function () {
+    $condition = false;
+    $message = "My custom message";
+
+    expect($condition)->toBeTrue($message);
+});
+';
+
+    expect($convertedCode)->toEqual($expected);
+});
