@@ -22,6 +22,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
     public function __construct(
         protected string $oldName,
         protected string $newName,
+        protected int $argumentCount,
     ) {
     }
 
@@ -62,11 +63,9 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
      */
     private function expected(array $args): array
     {
-        if (count($args) === 1) {
-            return [];
-        }
+        $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
 
-        unset($args[1]);
+        unset($args[$actualPosition]);
 
         return $args;
     }
@@ -78,6 +77,8 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
      */
     private function actual(array $args): Arg|VariadicPlaceholder
     {
-        return count($args) === 1 ? $args[0] : $args[1];
+        $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
+
+        return $args[$actualPosition];
     }
 }
