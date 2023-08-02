@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [v2.2.1 (2023-08-02)](https://github.com/pestphp/pest/compare/v2.2.0...v2.2.1)
+
+### Fixed
+
+- Expectation switched place with message while using a message ([#22](https://github.com/pestphp/pest-plugin-drift/pull/22))
+
 ## [v2.2.0 (2023-07-25)](https://github.com/pestphp/pest/compare/v2.1.0...v2.2.0)
 
 ### Added
