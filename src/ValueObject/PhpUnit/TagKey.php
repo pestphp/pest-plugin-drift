@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pest\Drift\ValueObject\PhpDoc;
+namespace Pest\Drift\ValueObject\PhpUnit;
 
 final class TagKey
 {

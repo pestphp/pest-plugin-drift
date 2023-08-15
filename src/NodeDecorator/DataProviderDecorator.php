@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Pest\Drift\NodeDecorator;
 
+use Pest\Drift\Analyzer\ClassMethodAnalyzer;
 use Pest\Drift\Extractor\PhpDocTagExtractor;
 use Pest\Drift\ValueObject\Node\AttributeKey;
-use Pest\Drift\ValueObject\PhpDoc\TagKey;
+use Pest\Drift\ValueObject\PhpUnit\TagKey;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
@@ -19,7 +20,7 @@ final class DataProviderDecorator extends NodeVisitorAbstract
      */
     private array $dataProviders = [];
 
-    public function __construct(private readonly NodeFinder $nodeFinder, private readonly PhpDocTagExtractor $phpDocTagExtractor)
+    public function __construct(private readonly NodeFinder $nodeFinder, private readonly PhpDocTagExtractor $phpDocTagExtractor, private readonly ClassMethodAnalyzer $classMethodAnalyzer)
     {
     }
 
@@ -30,7 +31,8 @@ final class DataProviderDecorator extends NodeVisitorAbstract
 
         foreach ($classMethods as $classMethod) {
             $phpDocTags = $this->phpDocTagExtractor->fromComments($classMethod->getComments());
-            $dataProviders = $phpDocTags[TagKey::DATA_PROVIDER] ?? [];
+            $attributeGroups = $this->classMethodAnalyzer->reduceAttrGroups($classMethod);
+            $dataProviders = $attributeGroups[\Pest\Drift\ValueObject\PhpUnit\AttributeKey::DATA_PROVIDER] ?? ($phpDocTags[TagKey::DATA_PROVIDER] ?? []);
             $this->dataProviders = [...$this->dataProviders, ...$dataProviders];
         }
 

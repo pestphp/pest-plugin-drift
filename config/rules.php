@@ -8,13 +8,17 @@ $phpDocTagExtractor = new \Pest\Drift\Extractor\PhpDocTagExtractor();
 
 return [
     new \Pest\Drift\NodeDecorator\PhpDocTagDecorator($phpDocTagExtractor),
-    new \Pest\Drift\NodeDecorator\DataProviderDecorator($nodeFinder, $phpDocTagExtractor),
+    new \Pest\Drift\NodeDecorator\DataProviderDecorator($nodeFinder, $phpDocTagExtractor, $classMethodAnalyzer),
     new \Pest\Drift\Rules\RemoveClass(),
     new \Pest\Drift\Rules\RemoveNamespace(),
     new \Pest\Drift\Rules\ExtendsToUses(),
     new \Pest\Drift\Rules\RemoveExtendsUse(),
     new \Pest\Drift\Rules\RemoveTraitsUse(),
-    new \Pest\Drift\Rules\ConvertTestMethod($classMethodAnalyzer),
+    new \Pest\Drift\Rules\ConvertTestMethod($classMethodAnalyzer, [
+        new \Pest\Drift\Rules\AttributeAnnotations\ConvertDataProvider(),
+        new \Pest\Drift\Rules\AttributeAnnotations\ConvertDepends(),
+        new \Pest\Drift\Rules\AttributeAnnotations\ConvertGroup(),
+    ]),
     new \Pest\Drift\Rules\ConvertNonTestMethod($classMethodAnalyzer),
     new \Pest\Drift\Rules\ConvertMethodCall(
         new \Pest\Drift\Parser\NodeFinder\NonTestMethodFinder(
