@@ -119,6 +119,24 @@ it('convert phpunit class method to pest function call', function () {
         ->not->toContain('/** @test */');
 });
 
+it('convert phpunit class method to pest function call from attribute', function () {
+    $code = '<?php
+        class MyTest {
+            #[Test]
+            public function it_does_something(): void
+            {
+                // ...
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain("it('does something', function () {")
+        ->not->toContain('#[Test]');
+});
+
 it('convert lifecyle method', function () {
     $code = '<?php
         class MyTest {
@@ -380,6 +398,40 @@ class ExampleTest extends TestCase
     /**
      * @dataProvider emailProvider
      */
+    public function testHasEmails(string $email)
+    {
+    }
+
+    public function emailProvider()
+    {
+        return ["example@example.com", "other@example.com"];
+    }
+}
+';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '<?php
+
+test(\'has emails\', function (string $email) {
+})->with(\'emailProvider\');
+
+dataset(\'emailProvider\', function () {
+    return ["example@example.com", "other@example.com"];
+});
+';
+
+    expect($convertedCode)->toEqual($expected);
+});
+
+it('convert data providers to dataset from attribute', function () {
+    $code = '<?php
+
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    #[DataProvider(\'emailProvider\')]
     public function testHasEmails(string $email)
     {
     }
@@ -1109,6 +1161,29 @@ test(\'one\', function () {
     expect($convertedCode)->toEqual($expected);
 });
 
+it('convert @group to pest group from attribute', function () {
+    $code = '<?php
+
+class MyTest {
+    #[Group("fortify", "actions")]
+    public function test_one()
+    {
+
+    }
+}
+';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = '<?php
+
+test(\'one\', function () {
+})->group(\'fortify\', \'actions\');
+';
+
+    expect($convertedCode)->toEqual($expected);
+});
+
 it('convert @depends to pest depends', function () {
     $code = '<?php
         class MyTest {
@@ -1134,6 +1209,32 @@ it('convert @depends to pest depends', function () {
     expect($convertedCode)
         ->toContain('function ($foo)')
         ->not->toContain('@depends test_one')
+        ->toContain("->depends('one')");
+});
+
+it('convert @depends to pest depends from attribute', function () {
+    $code = '<?php
+        class MyTest {
+            public function test_one()
+            {
+                $foo = "foo";
+
+                return $foo;
+            }
+
+            #[Depends("test_one")]
+            public function test_two($foo)
+            {
+
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain('function ($foo)')
+        ->not->toContain('#[Depends("test_one")]')
         ->toContain("->depends('one')");
 });
 

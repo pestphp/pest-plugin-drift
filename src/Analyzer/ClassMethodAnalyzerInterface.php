@@ -20,4 +20,11 @@ interface ClassMethodAnalyzerInterface
      * Check if the class method is a test method.
      */
     public function isTestMethod(ClassMethod $classMethod): bool;
+
+    /**
+     * Reduce classMethod attrGroups and return an array with attrs names.
+     *
+     * @return string[][]
+     */
+    public function reduceAttrGroups(ClassMethod $classMethod): array;
 }

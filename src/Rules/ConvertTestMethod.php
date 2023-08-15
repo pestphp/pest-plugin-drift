@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Pest\Drift\Rules;
 
+use Pest\Drift\Analyzer\ClassMethodAnalyzer;
+use Pest\Drift\Rules\AttributeAnnotations\AbstractConvertAttributeAnnotation;
 use Pest\Drift\ValueObject\Node\AttributeKey;
-use Pest\Drift\ValueObject\PhpDoc\TagKey;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -22,6 +22,14 @@ use PhpParser\Node\Stmt\Expression;
 final class ConvertTestMethod extends AbstractConvertClassMethod
 {
     /**
+     * @param  AbstractConvertAttributeAnnotation[]  $attributeAnnotationConverters
+     */
+    public function __construct(ClassMethodAnalyzer $classMethodAnalyzer, private readonly array $attributeAnnotationConverters)
+    {
+        parent::__construct($classMethodAnalyzer);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function apply(ClassMethod $classMethod): int|Node|array|null
@@ -31,6 +39,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
         $comments = $classMethod->getComments();
         /** @var array<string, array<int, string>> $phpDocTags */
         $phpDocTags = $classMethod->getAttribute(AttributeKey::PHP_DOC_TAGS, []);
+        $attributeGroups = $this->classMethodAnalyzer->reduceAttrGroups($classMethod);
 
         if ($comments !== []) {
             $attributes['comments'] = [];
@@ -48,9 +57,9 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
             ]
         );
 
-        $testCall = $this->addDepends($testCall, $phpDocTags);
-        $testCall = $this->addDataset($testCall, $phpDocTags);
-        $testCall = $this->addGroup($testCall, $phpDocTags);
+        foreach ($this->attributeAnnotationConverters as $attributeAnnotationConverter) {
+            $testCall = $attributeAnnotationConverter->apply($testCall, $phpDocTags, $attributeGroups);
+        }
 
         return new Expression($testCall, $attributes);
     }
@@ -61,65 +70,6 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
     protected function filter(ClassMethod $classMethod): bool
     {
         return $this->classMethodAnalyzer->isTestMethod($classMethod);
-    }
-
-    /**
-     * @param  array<string, array<int, string>>  $phpDocTags
-     */
-    private function addDepends(Node\Expr\CallLike $testCall, array $phpDocTags): Node\Expr\CallLike
-    {
-        $depends = $phpDocTags[TagKey::DEPENDS] ?? [];
-        $dependsArgument = array_map(fn ($testName): \PhpParser\Node\Arg => new Arg(new String_($this->methodNameToDescription($testName))), $depends);
-
-        if ($dependsArgument !== []) {
-            return new MethodCall(
-                $testCall,
-                'depends',
-                $dependsArgument
-            );
-        }
-
-        return $testCall;
-    }
-
-    /**
-     * @param  array<string, array<int, string>>  $phpDocTags
-     */
-    private function addDataset(Node\Expr\CallLike $testCall, array $phpDocTags): Node\Expr\CallLike
-    {
-        $dataProviders = $phpDocTags[TagKey::DATA_PROVIDER] ?? [];
-
-        $datasetArgument = array_map(fn ($datasetName): \PhpParser\Node\Arg => new Arg(new String_($datasetName)), $dataProviders);
-
-        if ($datasetArgument !== []) {
-            return new MethodCall(
-                $testCall,
-                'with',
-                $datasetArgument
-            );
-        }
-
-        return $testCall;
-    }
-
-    /**
-     * @param  array<string, array<int, string>>  $phpDocTags
-     */
-    private function addGroup(Node\Expr\CallLike $testCall, array $phpDocTags): Node\Expr\CallLike
-    {
-        $groups = $phpDocTags[TagKey::GROUP] ?? [];
-
-        $groupArgument = array_map(fn ($groupName): \PhpParser\Node\Arg => new Arg(new String_($groupName)), $groups);
-
-        if ($groupArgument !== []) {
-            return new MethodCall(
-                $testCall,
-                'group',
-                $groupArgument
-            );
-        }
-
-        return $testCall;
     }
 
     /**
