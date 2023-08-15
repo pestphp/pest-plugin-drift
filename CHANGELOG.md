@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [v2.3.0 (2023-08-15)](https://github.com/pestphp/pest-plugin-drift/compare/v2.2.1...v2.3.0)
+
+### Added
+
+- Add support for `#[Test]`, `#[Group]`, `#[Depends]` and `#[DataProvider]` attributes
+
 ## [v2.2.1 (2023-08-02)](https://github.com/pestphp/pest-plugin-drift/compare/v2.2.0...v2.2.1)
 
 ### Fixed
