@@ -971,6 +971,104 @@ it('convert assertJson to PestExpectation', function () {
     expect($convertedCode)->toContain('expect(1)->toBeJson()');
 });
 
+it('convert assertJson that use the non phpunit assertJson to PestExpectation', function(){
+    $code = <<<'CODE'
+<?php
+class MyTest {
+    public function test_can_store_some_stuff()
+    {
+        $data = ["name" => "ali"];
+
+        $response = $this->postJson(route("users.store"), $data);
+
+        $response->assertCreated();
+
+        $response->assertJson([
+            "data" => [
+                "name" => $data["name"]
+            ]
+        ]);
+    }
+}
+CODE;
+
+    $expectedCode = <<<'CODE'
+<?php
+test('can store some stuff', function () {
+    $data = ["name" => "ali"];
+
+    $response = $this->postJson(route("users.store"), $data);
+
+    $response->assertCreated();
+
+    expect($response)->assertJson([
+        "data" => [
+            "name" => $data["name"]
+        ]
+    ]);
+});
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toBe($expectedCode);
+});
+
+it('convert assertJson that use the phpunit with non phpunit assertJson to PestExpectation', function(){
+    $code = <<<'CODE'
+<?php
+class MyTest {
+    public function test_can_store_some_stuff()
+    {
+        $data = ["name" => "ali"];
+
+        $response = $this->postJson(route("users.store"), $data);
+
+        $response->assertCreated();
+        
+        $this->assertJson([
+             "data" => [
+                    "name" => $data["name"]
+                ]
+        ]);
+
+        $response->assertJson([
+            "data" => [
+                "name" => $data["name"]
+            ]
+        ]);
+    }
+}
+CODE;
+
+    $expectedCode = <<<'CODE'
+<?php
+test('can store some stuff', function () {
+    $data = ["name" => "ali"];
+
+    $response = $this->postJson(route("users.store"), $data);
+
+    $response->assertCreated();
+
+    expect([
+         "data" => [
+                "name" => $data["name"]
+            ]
+    ])->toBeJson();
+
+    expect($response)->assertJson([
+        "data" => [
+            "name" => $data["name"]
+        ]
+    ]);
+});
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toBe($expectedCode);
+});
+
 it('convert assertNan to PestExpectation', function () {
     $code = '<?php
         class MyTest {
