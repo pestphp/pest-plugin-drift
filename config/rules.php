@@ -63,7 +63,7 @@ return [
     new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertDirectoryIsReadable', 'toBeReadableDirectory', 2),
     new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertDirectoryIsWritable', 'toBeWritableDirectory', 2),
     new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertNan', 'toBeNan', 2),
-    new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertJson', 'toBeJson', 2),
+    new \Pest\Drift\Rules\Assertions\AssertJsonToExpectation(),
     new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertIsScalar', 'toBeScalar', 2),
     new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertIsResource', 'toBeResource', 2),
     new \Pest\Drift\Rules\Assertions\AssertionToExpectation('assertIsObject', 'toBeObject', 2),
