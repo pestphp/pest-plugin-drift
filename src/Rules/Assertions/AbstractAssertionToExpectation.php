@@ -61,7 +61,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
      * @param  array<Arg|VariadicPlaceholder>  $args
      * @return array<Arg|VariadicPlaceholder>
      */
-    private function expected(array $args): array
+    protected function expected(array $args): array
     {
         $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
 
@@ -75,7 +75,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
      *
      * @param  array<Arg|VariadicPlaceholder>  $args
      */
-    private function actual(array $args): Arg|VariadicPlaceholder
+    protected function actual(array $args): Arg|VariadicPlaceholder
     {
         $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
 
