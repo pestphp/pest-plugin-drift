@@ -79,6 +79,12 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
     {
         $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
 
-        return $args[$actualPosition];
+        $actualArgument = $args[$actualPosition];
+
+        if ($actualArgument instanceof Arg && $actualArgument->name instanceof Identifier) {
+            $actualArgument->name->name = 'value';
+        }
+
+        return $actualArgument;
     }
 }

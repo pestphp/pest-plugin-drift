@@ -1304,3 +1304,29 @@ test(\'one\', function () {
 
     expect($convertedCode)->toEqual($expected);
 });
+
+it('convert named arguments', function () {
+    $code = <<<'CODE'
+<?php
+class MyTest {
+    public function test_named_arguments()
+    {
+        $this->assertEquals(
+            expected: $expectedValue,
+            actual: $actualValue,
+        );
+    }
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = <<<'CODE'
+<?php
+test('named arguments', function () {
+    expect(value: $actualValue)->toEqual(expected: $expectedValue);
+});
+CODE;
+
+    expect($convertedCode)->toEqual($expected);
+});
