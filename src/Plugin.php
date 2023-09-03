@@ -14,9 +14,10 @@ use Pest\Exceptions\InvalidOption;
 use Pest\Plugins\Concerns\HandleArguments;
 use Pest\Plugins\Init;
 use Pest\Support\Container;
-use function Pest\testDirectory;
 use Pest\TestSuite;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function Pest\testDirectory;
 
 /**
  * @internal
