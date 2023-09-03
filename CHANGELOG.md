@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [v2.4.0 (2023-09-03)](https://github.com/pestphp/pest-plugin-drift/compare/v2.3.0...v2.4.0)
+
+### Added
+
+- Add support for handling named arguments in test conversion
+
 ## [v2.3.0 (2023-08-15)](https://github.com/pestphp/pest-plugin-drift/compare/v2.2.1...v2.3.0)
 
 ### Added
