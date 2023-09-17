@@ -188,6 +188,27 @@ it('convert non test method', function () {
         ->not->toContain('$this->thisIsNotATest()');
 });
 
+it('convert non test static method calls', function () {
+    $code = '<?php
+        class MyTest {
+            protected static function thisIsNotATest() {}
+
+            public function test_non_test_method()
+            {
+                self::thisIsNotATest();
+            }
+        }
+    ';
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain('function thisIsNotATest()')
+        ->not->toContain('protected function thisIsNotATest()')
+        ->toContain('thisIsNotATest();')
+        ->not->toContain('self::thisIsNotATest()');
+});
+
 it('remove properties', function () {
     $code = '<?php
         class MyTest {
