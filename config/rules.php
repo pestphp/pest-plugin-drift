@@ -26,6 +26,12 @@ return [
             $classMethodAnalyzer
         )
     ),
+    new \Pest\Drift\Rules\ConvertStaticCall(
+        new \Pest\Drift\Parser\NodeFinder\NonTestMethodFinder(
+            new \Pest\Drift\Parser\NodeFinder\ClassMethodFinder($nodeFinder),
+            $classMethodAnalyzer
+        )
+    ),
     new \Pest\Drift\Rules\SetUpToBeforeEach($classMethodAnalyzer),
     new \Pest\Drift\Rules\SetUpBeforeClassToBeforeAll($classMethodAnalyzer),
     new \Pest\Drift\Rules\TearDownToAfterEach($classMethodAnalyzer),
