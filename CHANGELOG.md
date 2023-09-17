@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [v2.4.2 (2023-09-17)](https://github.com/pestphp/pest-plugin-drift/compare/v2.4.1...v2.4.2)
+
+### Fixed
+
+- Do not convert assertions coming from method calls ([#34](https://github.com/pestphp/pest-plugin-drift/pull/34))
+
 ## [v2.4.1 (2023-09-17)](https://github.com/pestphp/pest-plugin-drift/compare/v2.4.0...v2.4.1)
 
 ### Fixed
