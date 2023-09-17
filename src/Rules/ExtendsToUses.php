@@ -43,6 +43,9 @@ final class ExtendsToUses extends NodeVisitorAbstract
         if (! $node->extends instanceof Name) {
             return null;
         }
+        if (! $node->name instanceof \PhpParser\Node\Identifier) {
+            return null;
+        }
 
         /** @var Name $resolvedName */
         $resolvedName = $node->extends->getAttribute('resolvedName');
