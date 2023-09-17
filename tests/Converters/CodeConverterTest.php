@@ -971,6 +971,37 @@ it('convert assertJson to PestExpectation', function () {
     expect($convertedCode)->toContain('expect(1)->toBeJson()');
 });
 
+it('do not convert assertJson when not called with this', function () {
+    $code = <<<'CODE'
+<?php
+class MyTest {
+    public function test_non_phpunit_assert_json()
+    {
+        $response->assertJson([
+            "data" => [
+                "name" => $data["name"]
+            ]
+        ]);
+    }
+}
+CODE;
+
+    $expectedCode = <<<'CODE'
+<?php
+test('non phpunit assert json', function () {
+    $response->assertJson([
+        "data" => [
+            "name" => $data["name"]
+        ]
+    ]);
+});
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toBe($expectedCode);
+});
+
 it('convert assertNan to PestExpectation', function () {
     $code = '<?php
         class MyTest {
