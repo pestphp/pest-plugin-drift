@@ -38,6 +38,10 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
             return null;
         }
 
+        if ($methodCall->var instanceof Expr\Variable && $methodCall->var->name != 'this') {
+            return null;
+        }
+
         return new MethodCall(
             $this->buildExpect($methodCall),
             new Identifier($this->newName),
