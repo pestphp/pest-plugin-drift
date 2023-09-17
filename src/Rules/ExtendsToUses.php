@@ -25,6 +25,13 @@ final class ExtendsToUses extends NodeVisitorAbstract
         'Tests\TestCase',
     ];
 
+    public function beforeTraverse(array $nodes)
+    {
+        $this->usesStmt = null;
+
+        return parent::beforeTraverse($nodes);
+    }
+
     /**
      * {@inheritDoc}
      */

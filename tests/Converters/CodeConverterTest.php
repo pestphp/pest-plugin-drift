@@ -1361,3 +1361,33 @@ CODE;
 
     expect($convertedCode)->toEqual($expected);
 });
+
+it('reset extends context between tests conversion', function () {
+    $codeConverter = codeConverter();
+
+    $code = <<<'CODE'
+<?php
+
+class MyTest extends MyManager
+{
+
+}
+CODE;
+
+    $codeConverter->convert($code);
+
+    $code = <<<'CODE'
+<?php
+
+use PHPUnit\Framework\TestCase;
+
+class OtherTest extends TestCase
+{
+
+}
+CODE;
+
+    $convertedCode = $codeConverter->convert($code);
+
+    expect($convertedCode)->not->toContain('MyManager');
+});
