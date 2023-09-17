@@ -982,6 +982,11 @@ class MyTest {
                 "name" => $data["name"]
             ]
         ]);
+        $this->getJson('/')->assertJson([
+            "data" => [
+                "name" => $data["name"]
+            ]
+        ]);
     }
 }
 CODE;
@@ -990,6 +995,11 @@ CODE;
 <?php
 test('non phpunit assert json', function () {
     $response->assertJson([
+        "data" => [
+            "name" => $data["name"]
+        ]
+    ]);
+    $this->getJson('/')->assertJson([
         "data" => [
             "name" => $data["name"]
         ]
