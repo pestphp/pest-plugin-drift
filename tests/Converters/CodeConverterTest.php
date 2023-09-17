@@ -1391,3 +1391,25 @@ CODE;
 
     expect($convertedCode)->not->toContain('MyManager');
 });
+
+it('keep semicolon on group use after conversion', function () {
+    $code = <<<'CODE'
+<?php
+
+namespace My\Tests;
+
+use My\{Foo, Bar};
+use My\{Hello, World};
+
+class ResultTest extends TestCase
+{
+
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain("use My\{Foo, Bar};")
+        ->toContain("use My\{Hello, World};");
+});

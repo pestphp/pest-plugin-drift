@@ -32,6 +32,11 @@ final class Standard extends BaseStandard
             return $this->pFallback($node);
         }
 
+        // Don't preserve formatting for GroupUse since it can lead to SyntaxError
+        if ($node instanceof Node\Stmt\GroupUse) {
+            return parent::pStmt_GroupUse($node);
+        }
+
         return parent::p($node, $parentFormatPreserved);
     }
 
