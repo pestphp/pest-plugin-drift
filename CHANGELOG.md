@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## [v2.4.1 (2023-09-17)](https://github.com/pestphp/pest-plugin-drift/compare/v2.4.0...v2.4.1)
+
+### Fixed
+
+- Only convert PHPUnit assertions ([#30](https://github.com/pestphp/pest-plugin-drift/pull/30))
+- Reset extends-to-uses context between each conversion ([#31](https://github.com/pestphp/pest-plugin-drift/pull/31))
+- Preserved semicolons in group use after conversion ([#32](https://github.com/pestphp/pest-plugin-drift/pull/32))
+
 ## [v2.4.0 (2023-09-03)](https://github.com/pestphp/pest-plugin-drift/compare/v2.3.0...v2.4.0)
 
 ### Added
