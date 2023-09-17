@@ -204,7 +204,7 @@ it('convert non test static method calls', function () {
 
     expect($convertedCode)
         ->toContain('function thisIsNotATest()')
-        ->not->toContain('protected function thisIsNotATest()')
+        ->not->toContain('protected static function thisIsNotATest()')
         ->toContain('thisIsNotATest();')
         ->not->toContain('self::thisIsNotATest()');
 });
