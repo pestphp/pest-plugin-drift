@@ -1444,3 +1444,31 @@ CODE;
         ->toContain("use My\{Foo, Bar};")
         ->toContain("use My\{Hello, World};");
 });
+
+it('ignores extends from anonymous classes within tests', function () {
+    $code = <<<'CODE'
+<?php
+
+namespace My\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+class ResultTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        $anonymousClass = new class () extends \stdClass {
+            public function foo(): void {}
+        };
+    }
+
+    public function testSomething(): void {
+        $this->assertTrue(true);
+    }
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->not->toContain('uses(');
+});
