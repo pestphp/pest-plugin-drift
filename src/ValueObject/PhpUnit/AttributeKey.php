@@ -12,5 +12,7 @@ final class AttributeKey
 
     public const DATA_PROVIDER = 'DataProvider';
 
+    public const DATA_PROVIDER_EXTERNAL = 'DataProviderExternal';
+
     public const GROUP = 'Group';
 }

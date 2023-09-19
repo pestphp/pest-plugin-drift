@@ -12,5 +12,7 @@ final class TagKey
 
     public const DATA_PROVIDER = '@dataProvider';
 
+    public const DATA_PROVIDER_EXTERNAL = '@dataProviderExternal';
+
     public const GROUP = '@group';
 }

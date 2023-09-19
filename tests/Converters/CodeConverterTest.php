@@ -424,6 +424,37 @@ dataset(\'emailProvider\', function () {
     expect($convertedCode)->toEqual($expected);
 });
 
+it('convert external data providers to dataset', function (string $attribute) {
+    $code = <<<CODE
+<?php
+
+use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+
+class ExampleTest extends TestCase
+{
+    $attribute
+    public function testHasEmails(string \$email)
+    {
+    }
+}
+
+final class ExternalProviders {
+    public static function emailProvider()
+    {
+        return ["example@example.com", "other@example.com"];
+    }
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain("->with('emailProvider');")->toContain("dataset('emailProvider', function");
+})->with([
+    'DataProviderExternal Attribute' => "#[DataProviderExternal(ExternalProviders::class, 'emailProvider')]",
+    'phpDoc Tag' => "/**\n    * @dataProviderExternal emailProvider\n    */",
+]);
+
 it('convert data providers to dataset from attribute', function () {
     $code = '<?php
 
