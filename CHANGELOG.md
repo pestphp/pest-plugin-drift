@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [v2.5.0 (2023-09-26)](https://github.com/pestphp/pest-plugin-drift/compare/v2.4.2...v2.5.0)
+
+### Added
+
+- Add partial support for `#[DataProviderExternal]` attribute ([#37](https://github.com/pestphp/pest-plugin-drift/pull/37))
+
+### Fixed
+
+- Fix incorrect uses when anonymous class extends another class ([#36](https://github.com/pestphp/pest-plugin-drift/pull/36))
+- Fix static call conversion ([#35](https://github.com/pestphp/pest-plugin-drift/pull/35))
+
 ## [v2.4.2 (2023-09-17)](https://github.com/pestphp/pest-plugin-drift/compare/v2.4.1...v2.4.2)
 
 ### Fixed
