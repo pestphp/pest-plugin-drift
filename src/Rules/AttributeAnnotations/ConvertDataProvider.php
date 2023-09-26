@@ -15,7 +15,11 @@ final class ConvertDataProvider extends AbstractConvertAttributeAnnotation
 
     protected function getArguments(array $phpDocTags, array $attributeGroups): array
     {
-        $dataProviders = $attributeGroups[AttributeKey::DATA_PROVIDER] ?? ($phpDocTags[TagKey::DATA_PROVIDER] ?? []);
+        $dataProviders = $attributeGroups[AttributeKey::DATA_PROVIDER] ??
+                        $attributeGroups[AttributeKey::DATA_PROVIDER_EXTERNAL] ??
+                        $phpDocTags[TagKey::DATA_PROVIDER] ??
+                        $phpDocTags[TagKey::DATA_PROVIDER_EXTERNAL] ??
+                        [];
 
         return array_map(fn ($datasetName): Arg => new Arg(new String_($datasetName)), $dataProviders);
     }

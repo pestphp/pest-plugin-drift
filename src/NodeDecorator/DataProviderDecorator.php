@@ -32,7 +32,12 @@ final class DataProviderDecorator extends NodeVisitorAbstract
         foreach ($classMethods as $classMethod) {
             $phpDocTags = $this->phpDocTagExtractor->fromComments($classMethod->getComments());
             $attributeGroups = $this->classMethodAnalyzer->reduceAttrGroups($classMethod);
-            $dataProviders = $attributeGroups[\Pest\Drift\ValueObject\PhpUnit\AttributeKey::DATA_PROVIDER] ?? ($phpDocTags[TagKey::DATA_PROVIDER] ?? []);
+            $dataProviders = $attributeGroups[\Pest\Drift\ValueObject\PhpUnit\AttributeKey::DATA_PROVIDER] ??
+                            $attributeGroups[\Pest\Drift\ValueObject\PhpUnit\AttributeKey::DATA_PROVIDER_EXTERNAL] ??
+                            $phpDocTags[TagKey::DATA_PROVIDER] ??
+                            $phpDocTags[TagKey::DATA_PROVIDER_EXTERNAL] ??
+                            [];
+
             $this->dataProviders = [...$this->dataProviders, ...$dataProviders];
         }
 
