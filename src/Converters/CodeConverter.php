@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Pest\Drift\Converters;
 
 use Pest\Drift\Exceptions\UnrecoverableException;
-use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PhpParser\PrettyPrinterAbstract;
@@ -21,8 +20,7 @@ final class CodeConverter
     public function __construct(
         private readonly Parser $parser,
         private readonly NodeTraverserInterface $traverser,
-        private readonly PrettyPrinterAbstract $prettyPrinter,
-        private readonly Emulative $lexer
+        private readonly PrettyPrinterAbstract $prettyPrinter
     ) {
         //
     }
@@ -36,7 +34,7 @@ final class CodeConverter
     {
         $currentStatements = $this->parser->parse($code);
 
-        $oldTokens = $this->lexer->getTokens();
+        $oldTokens = $this->parser->getTokens();
 
         if (is_null($currentStatements)) {
             throw new UnrecoverableException('The parser was unable to recover from an error.');

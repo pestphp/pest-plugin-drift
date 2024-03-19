@@ -6,7 +6,7 @@ namespace Pest\Drift\Rules;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
+use PhpParser\Node\UseItem;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
@@ -40,7 +40,7 @@ abstract class AbstractRemoveUse extends NodeVisitorAbstract
         // Filter use to remove.
         $node->uses = array_filter(
             $node->uses,
-            fn (UseUse $use): bool => ! in_array($use->name->getLast(), $this->useToRemove, true) && $use->name->isQualified()
+            fn (UseItem $use): bool => ! in_array($use->name->getLast(), $this->useToRemove, true) && $use->name->isQualified()
         );
 
         // Remove unnecessary use.

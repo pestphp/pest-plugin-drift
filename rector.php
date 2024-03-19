@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
+use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 
@@ -23,5 +24,11 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::EARLY_RETURN,
         SetList::TYPE_DECLARATION,
         SetList::PRIVATIZATION,
+    ]);
+
+    $rectorConfig->skip([
+        RemoveExtraParametersRector::class => [
+            __DIR__.'/src/Parser/PrettyPrinter/Standard.php',
+        ],
     ]);
 };

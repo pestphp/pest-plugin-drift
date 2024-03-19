@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Pest\Drift\Converters;
 
 use Pest\Drift\Parser\PrettyPrinter\Standard;
-use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use PhpParser\Parser\Php7;
+use PhpParser\ParserFactory;
 
 /**
  * @internal
@@ -24,16 +23,8 @@ final class CodeConverterFactory
     {
         $visitors = require __DIR__.'/../../config/rules.php';
 
-        $lexer = new Emulative([
-            'usedAttributes' => [
-                'comments',
-                'startLine', 'endLine',
-                'startTokenPos', 'endTokenPos',
-            ],
-        ]);
-
         $nodeTraverser = new NodeTraverser();
-        $parser = new Php7($lexer);
+        $parser = (new ParserFactory())->createForNewestSupportedVersion();
         $prettyPrinter = new Standard();
 
         $nodeTraverser->addVisitor(new NodeConnectingVisitor());
@@ -46,6 +37,6 @@ final class CodeConverterFactory
             $nodeTraverser->addVisitor($visitor);
         }
 
-        return new CodeConverter($parser, $nodeTraverser, $prettyPrinter, $lexer);
+        return new CodeConverter($parser, $nodeTraverser, $prettyPrinter);
     }
 }

@@ -24,7 +24,7 @@ final class RemoveClass extends NodeVisitorAbstract
 
         $parent = $node->getAttribute('parent');
 
-        if ($parent !== null && ! $parent instanceof Node\Stmt\Namespace_) {
+        if ($parent !== null && ! $parent instanceof Node\Stmt\Namespace_ && ! $parent instanceof Node\Stmt\Use_) {
             return $node;
         }
 

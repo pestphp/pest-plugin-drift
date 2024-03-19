@@ -56,7 +56,7 @@ final class MissingUseFinder implements MissingUseFinderInterface
             if (in_array($resolvedName->toString(), $uses, true)) {
                 continue;
             }
-            if ((is_countable($resolvedName->parts) ? count($resolvedName->parts) : 0) === 1) { // @phpstan-ignore-line
+            if ((is_countable($resolvedName->getParts()) ? count($resolvedName->getParts()) : 0) === 1) { // @phpstan-ignore-line
                 continue;
             }
 

@@ -10,7 +10,7 @@ final class PhpDocTagExtractor
 {
     /**
      * @param  array<int, Comment>  $comments
-     * @return  array<string, array<int, string>>
+     * @return array<string, array<int, string>>
      */
     public function fromComments(array $comments): array
     {

@@ -24,35 +24,39 @@ it('remove class', function () {
 });
 
 it('keep anonymous class', function () {
-    $code = '<?php
-        class MyTest {
-            public function test_foo(): void
+    $code = <<<'CODE'
+<?php
+class MyTest {
+    public function test_foo(): void
+    {
+        $step = new class
+        {
+            public function testFunction(): array
             {
-                $step = new class
-                {
-                    public function testFunction(): array
-                    {
-                        return [];
-                    }
-                };
-                $result = (new ExampleClass())->exampleMethod([$step]);
-                $this->assertTrue($result);
+                return [];
             }
-        }';
+        };
+        $result = (new ExampleClass())->exampleMethod([$step]);
+        $this->assertTrue($result);
+    }
+}
+CODE;
 
     $convertedCode = codeConverter()->convert($code);
 
-    $expected = '<?php
-        test(\'foo\', function () {
+    $expected = <<<'CODE'
+<?php
+test('foo', function () {
     $step = new class
     {
-        test(\'function\', function () {
+        test('function', function () {
             return [];
         });
     };
     $result = (new ExampleClass())->exampleMethod([$step]);
     expect($result)->toBeTrue();
-});';
+});
+CODE;
 
     expect($convertedCode)->toEqual($expected);
 });
@@ -259,26 +263,30 @@ it('add missing use', function () {
 });
 
 it('keep multiline statements', function () {
-    $code = '<?php
-        class MyTest {
-            public function multiline_statement()
-            {
-                $object
-                    ->foo()
-                    ->bar()
-                    ->hello(
-                        $the,
-                        $world
-                    );
+    $code = <<<'CODE'
+<?php
+class MyTest {
+    public function multiline_statement()
+    {
+        $object
+            ->foo()
+            ->bar()
+            ->hello(
+                $the,
+                $world
+            );
 
-                $alpha = "beta";
-            }
-        }
-    ';
+        $alpha = "beta";
+    }
+}
+CODE;
 
     $convertedCode = codeConverter()->convert($code);
 
-    $expected = '
+    $expected = <<<'CODE'
+<?php
+function multiline_statement()
+{
     $object
         ->foo()
         ->bar()
@@ -287,9 +295,11 @@ it('keep multiline statements', function () {
             $world
         );
 
-    $alpha = "beta";';
+    $alpha = "beta";
+}
+CODE;
 
-    expect($convertedCode)->toContain($expected);
+    expect($convertedCode)->toEqual($expected);
 });
 
 it('keep breakline between methods', function () {
@@ -342,7 +352,8 @@ test("the application returns a successful response", function () {
 });
 
 it('add break line after uses statements', function () {
-    $code = '<?php
+    $code = <<<'CODE'
+<?php
 
 namespace Tests\Feature;
 
@@ -357,24 +368,26 @@ class ExampleTest extends CustomTestCase
     {
     }
 }
-    ';
+CODE;
 
     $convertedCode = codeConverter()->convert($code);
 
-    $expected = "<?php
+    $expected = <<<'CODE'
+<?php
 
 uses(\Tests\CustomTestCase::class);
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('login screen can be rendered', function () {
 });
-";
+CODE;
 
     expect($convertedCode)->toEqual($expected);
 });
 
 it('keep break line after use statements', function () {
-    $code = '<?php
+    $code = <<<'CODE'
+<?php
 
 namespace Tests\Feature;
 
@@ -391,11 +404,12 @@ class ExampleTest extends TestCase
     {
     }
 }
-    ';
+CODE;
 
     $convertedCode = codeConverter()->convert($code);
 
-    $expected = "<?php
+    $expected = <<<'CODE'
+<?php
 
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -404,7 +418,7 @@ uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('login screen can be rendered', function () {
 });
-";
+CODE;
 
     expect($convertedCode)->toEqual($expected);
 });
@@ -511,7 +525,8 @@ dataset(\'emailProvider\', function () {
 });
 
 it('remove annotations', function () {
-    $code = "<?php
+    $code = <<<'CODE'
+<?php
 
 namespace Tests\Feature;
 
@@ -526,14 +541,17 @@ class ExampleTest extends TestCase
     public function test_the_application_returns_a_successful_response(): void
     {
     }
-}";
+}
+CODE;
 
     $convertedCode = codeConverter()->convert($code);
 
-    $expected = "<?php
+    $expected = <<<'CODE'
+<?php
 
 test('the application returns a successful response', function () {
-});";
+});
+CODE;
 
     expect($convertedCode)->toEqual($expected);
 });
@@ -1230,7 +1248,7 @@ it('convert assertStringEndsWith to PestExpectation', function () {
 });
 
 it('convert @group to pest group', function () {
-    $code = '
+    $code = <<<'CODE'
 <?php
 
 class MyTest {
@@ -1242,14 +1260,17 @@ class MyTest {
     {
 
     }
-}';
+}
+CODE;
 
     $convertedCode = codeConverter()->convert($code);
 
-    $expected = '<?php
+    $expected = <<<'CODE'
+<?php
 
-test(\'one\', function () {
-})->group(\'actions\', \'fortify\');';
+test('one', function () {
+})->group('actions', 'fortify');
+CODE;
 
     expect($convertedCode)->toEqual($expected);
 });

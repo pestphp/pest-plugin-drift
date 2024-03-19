@@ -7,7 +7,7 @@ namespace Pest\Drift\Rules;
 use Pest\Drift\Parser\NodeFinder\MissingUseFinderInterface;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
+use PhpParser\Node\UseItem;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -33,7 +33,7 @@ final class AddMissingUse extends NodeVisitorAbstract
             assert($resolvedName instanceof Name);
 
             $use = new Use_([
-                new UseUse($resolvedName),
+                new UseItem($resolvedName),
             ]);
 
             array_splice($nodes, 1, 0, [$use]);

@@ -54,7 +54,7 @@ final class ConvertNonTestMethod extends AbstractConvertClassMethod
                 'byRef' => $classMethod->byRef,
                 'params' => $classMethod->params,
                 'returnType' => $classMethod->returnType,
-                'stmts' => $classMethod->stmts,
+                'stmts' => $classMethod->stmts ?? [],
                 'attrGroups' => $classMethod->attrGroups,
             ],
             $classMethod->getAttributes()
@@ -71,7 +71,7 @@ final class ConvertNonTestMethod extends AbstractConvertClassMethod
             [
                 new Arg(new String_($methodName)),
                 new Arg(new Closure([
-                    'stmts' => $classMethod->stmts,
+                    'stmts' => $classMethod->stmts ?? [],
                     'params' => $classMethod->getParams(),
                 ])),
             ]

@@ -51,7 +51,7 @@ final class ConvertTestMethod extends AbstractConvertClassMethod
             [
                 new Arg(new String_($this->methodNameToDescription($methodName))),
                 new Arg(new Closure([
-                    'stmts' => $classMethod->stmts,
+                    'stmts' => $classMethod->stmts ?? [],
                     'params' => $classMethod->getParams(),
                 ])),
             ]

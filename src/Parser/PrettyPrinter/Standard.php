@@ -17,19 +17,21 @@ final class Standard extends BaseStandard
     /**
      * {@inheritDoc}
      */
-    protected function p(Node $node, $parentFormatPreserved = false): string
-    {
+    protected function p(
+        Node $node, int $precedence = self::MAX_PRECEDENCE, int $lhsPrecedence = self::MAX_PRECEDENCE,
+        bool $parentFormatPreserved = false
+    ): string {
         $origNode = $node->getAttribute('origNode');
 
         if ($origNode === null) {
-            return $this->pFallback($node);
+            return $this->pFallback($node, $precedence, $lhsPrecedence);
         }
 
         assert($origNode instanceof Node);
 
         $class = $node::class;
         if ($class !== $origNode::class) {
-            return $this->pFallback($node);
+            return $this->pFallback($node, $precedence, $lhsPrecedence);
         }
 
         // Don't preserve formatting for GroupUse since it can lead to SyntaxError
@@ -37,7 +39,7 @@ final class Standard extends BaseStandard
             return parent::pStmt_GroupUse($node);
         }
 
-        return parent::p($node, $parentFormatPreserved);
+        return parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
     }
 
     protected function pStmts(array $nodes, bool $indent = true): string
