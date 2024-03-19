@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## [v2.6.0 (2024-03-19)](https://github.com/pestphp/pest-plugin-drift/compare/v2.5.0...v2.6.0)
+
+### Dependency Updates
+
+- **php**: Updated from version `^8.1.0` to `^8.2.0`.
+- **symfony/finder**: Updated from version `^6.3.0` to `^7.0.0`.
+- **pestphp/pest**: Updated from version `^2.16.1` to `^2.34.4`.
+- **nikic/php-parser**: Updated from version `^4.17.1` to `^5.0.2`.
+
 ## [v2.5.0 (2023-09-26)](https://github.com/pestphp/pest-plugin-drift/compare/v2.4.2...v2.5.0)
 
 ### Added
