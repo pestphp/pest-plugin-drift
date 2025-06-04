@@ -1213,7 +1213,7 @@ it('convert assertThat to PestExpectation', function () {
         class MyTest {
             public function test_assert_that()
             {
-                $this->assertThat(new IsTrue(), true);
+                $this->assertThat(true, new IsTrue());
             }
         }
     ';
