@@ -62,6 +62,15 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
         );
     }
 
+    private function getActualPosition(): int
+    {
+        if ($this->oldName === 'assertThat') {
+            return 0;
+        }
+
+        return $this->argumentCount >= 3 ? 1 : 0;
+    }
+
     /**
      * Extract the expected arguments.
      *
@@ -70,7 +79,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
      */
     private function expected(array $args): array
     {
-        $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
+        $actualPosition = $this->getActualPosition();
 
         unset($args[$actualPosition]);
 
@@ -84,7 +93,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
      */
     private function actual(array $args): Arg|VariadicPlaceholder
     {
-        $actualPosition = $this->argumentCount >= 3 ? 1 : 0;
+        $actualPosition = $this->getActualPosition();
 
         $actualArgument = $args[$actualPosition];
 
