@@ -68,7 +68,7 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
      */
     public function reduceAttrGroups(ClassMethod $classMethod): array
     {
-        $attributeNames = array_map(fn ($attrGroup): array => $this->getAttributesValues($attrGroup->attrs), $classMethod->getAttrGroups());
+        $attributeNames = array_map(fn (\PhpParser\Node\AttributeGroup $attrGroup): array => $this->getAttributesValues($attrGroup->attrs), $classMethod->getAttrGroups());
 
         // Flatten the array
         return array_reduce($attributeNames, fn ($array, $item): array => array_merge($array, $item), []);

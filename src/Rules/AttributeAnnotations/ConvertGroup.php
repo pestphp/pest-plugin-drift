@@ -17,7 +17,7 @@ final class ConvertGroup extends AbstractConvertAttributeAnnotation
     {
         $groups = $attributeGroups[AttributeKey::GROUP] ?? ($phpDocTags[TagKey::GROUP] ?? []);
 
-        return array_map(fn ($groupName): Arg => new Arg(new String_($groupName)), $groups);
+        return array_map(fn (string $groupName): Arg => new Arg(new String_($groupName)), $groups);
     }
 
     protected function getMethodCallName(): string

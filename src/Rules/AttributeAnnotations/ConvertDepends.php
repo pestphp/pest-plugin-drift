@@ -17,7 +17,7 @@ final class ConvertDepends extends AbstractConvertAttributeAnnotation
     {
         $depends = $attributeGroups[AttributeKey::DEPENDS] ?? ($phpDocTags[TagKey::DEPENDS] ?? []);
 
-        return array_map(fn ($testName): Arg => new Arg(new String_($this->methodNameToDescription($testName))), $depends);
+        return array_map(fn (string $testName): Arg => new Arg(new String_($this->methodNameToDescription($testName))), $depends);
     }
 
     protected function getMethodCallName(): string

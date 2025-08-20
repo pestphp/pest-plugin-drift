@@ -1,20 +1,10 @@
-includes:
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
-    - vendor/ergebnis/phpstan-rules/rules.neon
-    - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
-
 parameters:
     level: max
     paths:
         - src
 
-    checkMissingIterableValueType: true
-    checkGenericClassInNonGenericObjectType: false
     reportUnmatchedIgnoredErrors: true
 
     ignoreErrors:
-        - "#is not allowed to extend#"
-        - "#has a nullable return type declaration.#"
-        - "#but since the containing class is abstract, it should be.#"
         - "#beforeTraverse\\(\\) should be compatible with return type#"
         - "#enterNode\\(\\) should#"

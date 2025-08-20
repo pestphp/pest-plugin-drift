@@ -21,7 +21,7 @@ final class ConvertDataProvider extends AbstractConvertAttributeAnnotation
                         $phpDocTags[TagKey::DATA_PROVIDER_EXTERNAL] ??
                         [];
 
-        return array_map(fn ($datasetName): Arg => new Arg(new String_($datasetName)), $dataProviders);
+        return array_map(fn (string $datasetName): Arg => new Arg(new String_($datasetName)), $dataProviders);
     }
 
     protected function getMethodCallName(): string
