@@ -12,9 +12,9 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2.0",
+        "php": "^8.3.0",
         "nikic/php-parser": "^5.6.1",
-        "pestphp/pest": "^3.8.3",
+        "pestphp/pest": "^4.0.0",
         "symfony/finder": "^7.3.2"
     },
     "autoload": {
@@ -28,7 +28,7 @@
         }
     },
     "require-dev": {
-        "pestphp/pest-dev-tools": "^3.4.0"
+        "pestphp/pest-dev-tools": "^4.0.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
