@@ -13,9 +13,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "nikic/php-parser": "^5.6.1",
+        "nikic/php-parser": "^5.7.0",
         "pestphp/pest": "^5.0.0",
-        "symfony/finder": "^8.0"
+        "symfony/finder": "^8.0.5"
     },
     "autoload": {
         "psr-4": {
