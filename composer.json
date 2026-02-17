@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.4",
         "nikic/php-parser": "^5.6.1",
-        "pestphp/pest": "^4.0.0",
+        "pestphp/pest": "^5.0.0",
         "symfony/finder": "^8.0"
     },
     "autoload": {
@@ -28,7 +28,7 @@
         }
     },
     "require-dev": {
-        "pestphp/pest-dev-tools": "^4.0.0"
+        "pestphp/pest-dev-tools": "^5.0.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
