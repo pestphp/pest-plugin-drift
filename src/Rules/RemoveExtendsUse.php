@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Drift\Rules;
 
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
 
@@ -25,7 +26,7 @@ final class RemoveExtendsUse extends AbstractRemoveUse
         $toRemove = [];
 
         foreach ($classesWithExtends as $classWithExtends) {
-            if (! $classWithExtends->extends instanceof \PhpParser\Node\Name) {
+            if (! $classWithExtends->extends instanceof Name) {
                 continue;
             }
             $toRemove[] = $classWithExtends->extends->toString();

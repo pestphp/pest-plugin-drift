@@ -6,6 +6,9 @@ namespace Pest\Drift\Analyzer;
 
 use Pest\Drift\ValueObject\Node\AttributeKey;
 use Pest\Drift\ValueObject\PhpUnit\TagKey;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\ClassMethod;
 
@@ -68,7 +71,7 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
      */
     public function reduceAttrGroups(ClassMethod $classMethod): array
     {
-        $attributeNames = array_map(fn (\PhpParser\Node\AttributeGroup $attrGroup): array => $this->getAttributesValues($attrGroup->attrs), $classMethod->getAttrGroups());
+        $attributeNames = array_map(fn (AttributeGroup $attrGroup): array => $this->getAttributesValues($attrGroup->attrs), $classMethod->getAttrGroups());
 
         // Flatten the array
         return array_reduce($attributeNames, fn ($array, $item): array => array_merge($array, $item), []);
@@ -77,7 +80,7 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
     /**
      * Get attribute names from the group.
      *
-     * @param  \PhpParser\Node\Attribute[]  $attributes
+     * @param  Attribute[]  $attributes
      * @return array<string, string[]>
      */
     private function getAttributesValues(array $attributes): array
@@ -92,7 +95,7 @@ final class ClassMethodAnalyzer implements ClassMethodAnalyzerInterface
     }
 
     /**
-     * @param  \PhpParser\Node\Arg[]  $arguments
+     * @param  Arg[]  $arguments
      * @return string[]
      */
     private function getValuesFromArguments(array $arguments): array

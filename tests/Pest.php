@@ -71,9 +71,9 @@ function initFixtures()
 
 function cleanFixtures()
 {
-    $paths = new \RecursiveIteratorIterator(
-        new \RecursiveDirectoryIterator(tmpDir(), \RecursiveDirectoryIterator::SKIP_DOTS),
-        \RecursiveIteratorIterator::CHILD_FIRST
+    $paths = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(tmpDir(), RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST
     );
 
     foreach ($paths as $path) {
