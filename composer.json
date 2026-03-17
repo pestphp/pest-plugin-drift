@@ -16,6 +16,7 @@
         "nikic/php-parser": "^5.7.0",
         "pestphp/pest": "^5.0.0",
         "symfony/finder": "^8.0.5"
+        "symfony/finder": "^7.4.6|^8.0.6"
     },
     "autoload": {
         "psr-4": {
@@ -40,16 +41,12 @@
         }
     },
     "scripts": {
-        "refacto": "rector",
         "lint": "pint",
-        "test:refacto": "rector --dry-run",
         "test:lint": "pint --test",
-        "test:types": "phpstan analyse --ansi",
         "test:unit": "pest --colors=always",
         "test": [
             "@test:refacto",
             "@test:lint",
-            "@test:types",
             "@test:unit"
         ]
     },

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
@@ -43,7 +44,7 @@ final class ExtendsToUses extends NodeVisitorAbstract
         if (! $node->extends instanceof Name) {
             return null;
         }
-        if (! $node->name instanceof \PhpParser\Node\Identifier) {
+        if (! $node->name instanceof Identifier) {
             return null;
         }
 

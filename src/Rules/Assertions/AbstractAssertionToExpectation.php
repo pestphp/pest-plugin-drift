@@ -41,7 +41,7 @@ abstract class AbstractAssertionToExpectation extends AbstractConvertMethodCall
             return null;
         }
 
-        if ($methodCall->var instanceof Expr\MethodCall) {
+        if ($methodCall->var instanceof MethodCall) {
             return null;
         }
 
