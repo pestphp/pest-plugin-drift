@@ -30,6 +30,9 @@
     "require-dev": {
         "pestphp/pest-dev-tools": "^5.0.0"
     },
+    "conflict": {
+        "pestphp/pest": "<5.0.0"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
