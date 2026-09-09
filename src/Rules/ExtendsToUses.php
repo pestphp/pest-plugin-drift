@@ -84,7 +84,7 @@ final class ExtendsToUses extends NodeVisitorAbstract
      */
     private function firstStatementPosition(array $nodes): int
     {
-        foreach (array_values($nodes) as $position => $node) {
+        foreach ($nodes as $position => $node) {
             if (! $node instanceof Declare_) {
                 return $position;
             }

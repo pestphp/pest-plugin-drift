@@ -1570,6 +1570,7 @@ class MyTest extends KernelTestCase
     public function testSomething(): void
     {
         $kernel = self::bootKernel();
+        $boot = self::bootKernel(...);
         static::assertTrue($kernel->isBooted());
     }
 }
@@ -1579,6 +1580,7 @@ CODE;
 
     expect($convertedCode)
         ->toContain('$kernel = $this->bootKernel();')
+        ->toContain('$boot = $this->bootKernel(...);')
         ->toContain('expect($kernel->isBooted())->toBeTrue();')
         ->not->toContain('self::bootKernel()')
         ->not->toContain('static::assertTrue(');

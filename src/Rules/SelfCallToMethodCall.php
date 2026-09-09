@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
 
 /**
  * @internal
@@ -33,31 +35,32 @@ final class SelfCallToMethodCall extends AbstractConvertStaticCall
         if (! $staticCall->name instanceof Identifier) {
             return null;
         }
-        if ($this->enclosingClassCount($staticCall) !== 1) {
+        if (! $this->isInsideRemovedClass($staticCall)) {
             return null;
         }
 
         return new MethodCall(
             new Variable('this'),
             $staticCall->name,
-            $staticCall->getArgs(),
+            $staticCall->args,
             $staticCall->getAttributes()
         );
     }
 
-    private function enclosingClassCount(StaticCall $staticCall): int
+    private function isInsideRemovedClass(StaticCall $staticCall): bool
     {
-        $count = 0;
         $node = $staticCall->getAttribute('parent');
 
         while ($node instanceof Node) {
             if ($node instanceof Class_) {
-                $count++;
+                $parent = $node->getAttribute('parent');
+
+                return $parent === null || $parent instanceof Namespace_ || $parent instanceof Use_;
             }
 
             $node = $node->getAttribute('parent');
         }
 
-        return $count;
+        return false;
     }
 }
