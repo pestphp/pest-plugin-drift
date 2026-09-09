@@ -26,6 +26,7 @@ use Pest\Drift\Rules\RemoveExtendsUse;
 use Pest\Drift\Rules\RemoveNamespace;
 use Pest\Drift\Rules\RemoveProperties;
 use Pest\Drift\Rules\RemoveTraitsUse;
+use Pest\Drift\Rules\SelfCallToMethodCall;
 use Pest\Drift\Rules\SetUpBeforeClassToBeforeAll;
 use Pest\Drift\Rules\SetUpToBeforeEach;
 use Pest\Drift\Rules\TearDownAfterClassToAfterAll;
@@ -118,4 +119,5 @@ return [
     new AssertionToExpectation('assertLessThanOrEqual', 'toBeLessThanOrEqual', 3),
     new AssertionToExpectation('assertGreaterThan', 'toBeGreaterThan', 3),
     new AssertionToExpectation('assertGreaterThanOrEqual', 'toBeGreaterThanOrEqual', 3),
+    new SelfCallToMethodCall,
 ];
