@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 
@@ -72,9 +73,23 @@ final class ExtendsToUses extends NodeVisitorAbstract
     public function afterTraverse(array $nodes): ?array
     {
         if ($this->usesStmt instanceof Expression) {
-            array_unshift($nodes, $this->usesStmt);
+            array_splice($nodes, $this->firstStatementPosition($nodes), 0, [$this->usesStmt]);
         }
 
         return $nodes;
+    }
+
+    /**
+     * @param  array<Node>  $nodes
+     */
+    private function firstStatementPosition(array $nodes): int
+    {
+        foreach ($nodes as $position => $node) {
+            if (! $node instanceof Declare_) {
+                return $position;
+            }
+        }
+
+        return count($nodes);
     }
 }

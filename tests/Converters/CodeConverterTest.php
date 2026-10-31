@@ -1530,3 +1530,82 @@ CODE;
 
     expect($convertedCode)->not->toContain('uses(');
 });
+
+it('keep strict types declaration as the first statement', function () {
+    $code = <<<'CODE'
+<?php
+
+declare(strict_types=1);
+
+namespace My\Tests;
+
+use My\KernelTestCase;
+
+class ResultTest extends KernelTestCase
+{
+    public function testSomething(): void {}
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    $expected = <<<'CODE'
+<?php
+
+declare(strict_types=1);
+uses(\My\KernelTestCase::class);
+test('something', function () {
+});
+CODE;
+
+    expect($convertedCode)->toEqual($expected);
+});
+
+it('convert self and static calls to method calls', function () {
+    $code = <<<'CODE'
+<?php
+
+class MyTest extends KernelTestCase
+{
+    public function testSomething(): void
+    {
+        $kernel = self::bootKernel();
+        $boot = self::bootKernel(...);
+        static::assertTrue($kernel->isBooted());
+    }
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)
+        ->toContain('$kernel = $this->bootKernel();')
+        ->toContain('$boot = $this->bootKernel(...);')
+        ->toContain('expect($kernel->isBooted())->toBeTrue();')
+        ->not->toContain('self::bootKernel()')
+        ->not->toContain('static::assertTrue(');
+});
+
+it('keep self calls within anonymous classes', function () {
+    $code = <<<'CODE'
+<?php
+
+class MyTest extends KernelTestCase
+{
+    public function testSomething(): void
+    {
+        $helper = new class
+        {
+            public function build(): array
+            {
+                return self::defaults();
+            }
+        };
+    }
+}
+CODE;
+
+    $convertedCode = codeConverter()->convert($code);
+
+    expect($convertedCode)->toContain('return self::defaults();');
+});
